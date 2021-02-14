@@ -29,26 +29,26 @@ namespace Proyecto1
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.TextEntrance = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.TextConsole = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.ButtonAnalyze = new System.Windows.Forms.Button();
+            this.ButtonExecute = new System.Windows.Forms.Button();
+            this.ButtonReports = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // richTextBox1
+            // TextEntrance
             // 
-            this.richTextBox1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.richTextBox1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.richTextBox1.Location = new System.Drawing.Point(12, 94);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(457, 413);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.TextEntrance.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.TextEntrance.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.TextEntrance.Location = new System.Drawing.Point(12, 94);
+            this.TextEntrance.Name = "TextEntrance";
+            this.TextEntrance.Size = new System.Drawing.Size(457, 413);
+            this.TextEntrance.TabIndex = 0;
+            this.TextEntrance.Text = "";
             // 
             // label1
             // 
@@ -61,17 +61,17 @@ namespace Proyecto1
             this.label1.TabIndex = 1;
             this.label1.Text = "Compi Pascal";
             // 
-            // textBox1
+            // TextConsole
             // 
-            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.textBox1.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.textBox1.Location = new System.Drawing.Point(478, 94);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(436, 190);
-            this.textBox1.TabIndex = 2;
-            this.textBox1.Text = "Consola";
+            this.TextConsole.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.TextConsole.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.TextConsole.Location = new System.Drawing.Point(478, 94);
+            this.TextConsole.Multiline = true;
+            this.TextConsole.Name = "TextConsole";
+            this.TextConsole.ReadOnly = true;
+            this.TextConsole.Size = new System.Drawing.Size(436, 190);
+            this.TextConsole.TabIndex = 2;
+            this.TextConsole.Text = "Consola";
             // 
             // label2
             // 
@@ -95,41 +95,44 @@ namespace Proyecto1
             this.label3.TabIndex = 4;
             this.label3.Text = "Consola:";
             // 
-            // button1
+            // ButtonAnalyze
             // 
-            this.button1.BackColor = System.Drawing.Color.Thistle;
-            this.button1.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button1.ForeColor = System.Drawing.Color.Indigo;
-            this.button1.Location = new System.Drawing.Point(544, 367);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(96, 34);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Traducir";
-            this.button1.UseVisualStyleBackColor = false;
+            this.ButtonAnalyze.BackColor = System.Drawing.Color.Thistle;
+            this.ButtonAnalyze.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonAnalyze.ForeColor = System.Drawing.Color.Indigo;
+            this.ButtonAnalyze.Location = new System.Drawing.Point(544, 367);
+            this.ButtonAnalyze.Name = "ButtonAnalyze";
+            this.ButtonAnalyze.Size = new System.Drawing.Size(96, 34);
+            this.ButtonAnalyze.TabIndex = 5;
+            this.ButtonAnalyze.Text = "Traducir";
+            this.ButtonAnalyze.UseVisualStyleBackColor = false;
+            this.ButtonAnalyze.Click += new System.EventHandler(this.ButtonAnalyze_Click);
             // 
-            // button2
+            // ButtonExecute
             // 
-            this.button2.BackColor = System.Drawing.Color.Thistle;
-            this.button2.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button2.ForeColor = System.Drawing.Color.Indigo;
-            this.button2.Location = new System.Drawing.Point(655, 367);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(97, 34);
-            this.button2.TabIndex = 6;
-            this.button2.Text = "Ejecutar";
-            this.button2.UseVisualStyleBackColor = false;
+            this.ButtonExecute.BackColor = System.Drawing.Color.Thistle;
+            this.ButtonExecute.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonExecute.ForeColor = System.Drawing.Color.Indigo;
+            this.ButtonExecute.Location = new System.Drawing.Point(655, 367);
+            this.ButtonExecute.Name = "ButtonExecute";
+            this.ButtonExecute.Size = new System.Drawing.Size(97, 34);
+            this.ButtonExecute.TabIndex = 6;
+            this.ButtonExecute.Text = "Ejecutar";
+            this.ButtonExecute.UseVisualStyleBackColor = false;
+            this.ButtonExecute.Click += new System.EventHandler(this.ButtonExecute_Click);
             // 
-            // button3
+            // ButtonReports
             // 
-            this.button3.BackColor = System.Drawing.Color.Thistle;
-            this.button3.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button3.ForeColor = System.Drawing.Color.Indigo;
-            this.button3.Location = new System.Drawing.Point(768, 367);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(94, 34);
-            this.button3.TabIndex = 7;
-            this.button3.Text = "Reportes";
-            this.button3.UseVisualStyleBackColor = false;
+            this.ButtonReports.BackColor = System.Drawing.Color.Thistle;
+            this.ButtonReports.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ButtonReports.ForeColor = System.Drawing.Color.Indigo;
+            this.ButtonReports.Location = new System.Drawing.Point(768, 367);
+            this.ButtonReports.Name = "ButtonReports";
+            this.ButtonReports.Size = new System.Drawing.Size(94, 34);
+            this.ButtonReports.TabIndex = 7;
+            this.ButtonReports.Text = "Reportes";
+            this.ButtonReports.UseVisualStyleBackColor = false;
+            this.ButtonReports.Click += new System.EventHandler(this.ButtonReports_Click);
             // 
             // label4
             // 
@@ -149,14 +152,14 @@ namespace Proyecto1
             this.BackColor = System.Drawing.Color.LightSteelBlue;
             this.ClientSize = new System.Drawing.Size(926, 519);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.ButtonReports);
+            this.Controls.Add(this.ButtonExecute);
+            this.Controls.Add(this.ButtonAnalyze);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.TextConsole);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.TextEntrance);
             this.ForeColor = System.Drawing.SystemColors.Highlight;
             this.Name = "Form1";
             this.Text = "Proyecto 1";
@@ -167,14 +170,14 @@ namespace Proyecto1
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox TextEntrance;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox TextConsole;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button ButtonAnalyze;
+        private System.Windows.Forms.Button ButtonExecute;
+        private System.Windows.Forms.Button ButtonReports;
         private System.Windows.Forms.Label label4;
     }
 }

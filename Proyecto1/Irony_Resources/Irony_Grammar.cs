@@ -1,11 +1,7 @@
-﻿// ------------------------------------------ Librerias E Imports -----------------------------------------------------
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Irony.Ast;
+﻿// ------------------------------------------ Librerias E Imports --------------------------------------------
 using Irony.Parsing;
 
-// ------------------------------------------------ NameSpace ---------------------------------------------------------
+// ------------------------------------------------ NameSpace ------------------------------------------------
 namespace Proyecto1.Irony_Resources
 {
     
@@ -17,192 +13,157 @@ namespace Proyecto1.Irony_Resources
         public Irony_Grammar() : base(caseSensitive: false) {
 
             // Región Expresiones Regulares
-
             #region RegularExpressions
 
                 // Comentarios Unilinea
-
                 CommentTerminal OneLineComment = new CommentTerminal("OneLineComment", "//", "\n", "\r\n");
 
                 // Comentarios Multilinea 1
-
                 CommentTerminal MultiLineComment1 = new CommentTerminal("MultiLineComment1", "(*", "*)");
 
                 // Comentarios Multilinea 2
-
                 CommentTerminal MultiLineComment2 = new CommentTerminal("MultiLineComment2", "{", "}");
 
                 // Identificadores 
-
                 IdentifierTerminal SimpleIdentifier = new IdentifierTerminal("Identifier");
-
+            
                 // Cadena String 
-
                 StringLiteral SimpleString = new StringLiteral("SimpleString", "'");
 
                 // Integer 
-
                 NumberLiteral SimpleInteger = new NumberLiteral("SimpleInteger");
 
                 // Real 
-
                 RegexBasedTerminal SimpleReal = new RegexBasedTerminal("SimpleReal", "[0-9]+'.'[0-9]+");
 
             #endregion
 
             // Región Terminales
-
             #region Terminals
 
                 // Tipos De Datos 
-                              
-                var StringType = ToTerm("string");    
-            
-                var IntegerType = ToTerm("integer");
 
-                var RealType = ToTerm("real");
+                BnfTerm StringType = ToTerm("string");
+
+                BnfTerm IntegerType = ToTerm("integer");
+
+                BnfTerm RealType = ToTerm("real");
           
-                var BooleanType = ToTerm("boolean");
+                BnfTerm BooleanType = ToTerm("boolean");
              
-                var VoidType = ToTerm("void");
+                BnfTerm VoidType = ToTerm("void");
 
-                var ObjetcType = ToTerm("object");
+                BnfTerm ObjetcType = ToTerm("object");
           
-                var ArrayType = ToTerm("array");
+                BnfTerm ArrayType = ToTerm("array");
 
                 // Palabras Reservadas 
 
-                var ReservedProgram = ToTerm("program");
+                BnfTerm ReservedProgram = ToTerm("program");
 
-                var ReservedEnd = ToTerm("end");
+                BnfTerm ReservedEnd = ToTerm("end");
             
-                var ReservedType = ToTerm("type");
+                BnfTerm ReservedType = ToTerm("type");
 
-                var ReservedVar = ToTerm("var");
+                BnfTerm ReservedBnfTerm = ToTerm("BnfTerm");
 
-                var ReservedBegin = ToTerm("begin");
+                BnfTerm ReservedBegin = ToTerm("begin");
 
-                var ReservedOf = ToTerm("of");
+                BnfTerm ReservedOf = ToTerm("of");
 
-                var ReservedConst = ToTerm("const");
+                BnfTerm ReservedConst = ToTerm("const");
 
-                var ReservedTrue = ToTerm("true");
+                BnfTerm ReservedTrue = ToTerm("true");
 
-                var ReservedFalse = ToTerm("false");
+                BnfTerm ReservedFalse = ToTerm("false");
 
-                var ReservedIf = ToTerm("if");
+                BnfTerm ReservedIf = ToTerm("if");
 
-                var ReservedThen = ToTerm("then");
+                BnfTerm ReservedThen = ToTerm("then");
 
-                var ReservedElse = ToTerm("else");
+                BnfTerm ReservedElse = ToTerm("else");
 
-                var ReservedCase = ToTerm("case");
+                BnfTerm ReservedCase = ToTerm("case");
 
-                var ReservedWhile = ToTerm("while");
+                BnfTerm ReservedWhile = ToTerm("while");
 
-                var ReservedDo = ToTerm("do");
+                BnfTerm ReservedDo = ToTerm("do");
 
-                var ReservedTo = ToTerm("to");
+                BnfTerm ReservedTo = ToTerm("to");
 
-                var ReservedFor = ToTerm("for");
+                BnfTerm ReservedFor = ToTerm("for");
 
-                var ReservedRepeat = ToTerm("repeat");
+                BnfTerm ReservedRepeat = ToTerm("repeat");
 
-                var ReservedUntil = ToTerm("until");
+                BnfTerm ReservedUntil = ToTerm("until");
 
-                var ReservedBreak = ToTerm("break");
+                BnfTerm ReservedBreak = ToTerm("break");
 
-                var ReservedContinue = ToTerm("continue");
+                BnfTerm ReservedContinue = ToTerm("continue");
 
-                var ReservedFunction = ToTerm("function");
+                BnfTerm ReservedFunction = ToTerm("function");
 
-                var ReservedProcedure = ToTerm("procedure");
+                BnfTerm ReservedProcedure = ToTerm("procedure");
 
-                var ReservedExit = ToTerm("exit");
+                BnfTerm ReservedExit = ToTerm("exit");
 
-                var ReservedWrite = ToTerm("write");
+                BnfTerm ReservedWrite = ToTerm("write");
 
-                var ReservedWriteLine = ToTerm("writeline");
+                BnfTerm ReservedWriteLine = ToTerm("writeline");
 
-                var ReserverdGraficar = ToTerm("graficar_ts");
+                BnfTerm ReserverdGraficar = ToTerm("graficar_ts");
 
                 // Simbolos (Comunes)
 
-                var SymbolSemiColon = ToTerm(";");
+                KeyTerm SymbolSemiColon = ToTerm(";");
 
-                var SymbolColon = ToTerm(":");
+                BnfTerm SymbolColon = ToTerm(":");
 
-                var SymbolComma = ToTerm(",");
+                BnfTerm SymbolComma = ToTerm(",");
 
-                var SymbolLeftParenthesis = ToTerm("(");
+                BnfTerm SymbolLeftParenthesis = ToTerm("(");
 
-                var SymbolRightParenthesis = ToTerm(")");
+                BnfTerm SymbolRightParenthesis = ToTerm(")");
 
-                var SymbolLeftBracket = ToTerm("[");
+                BnfTerm SymbolLeftBracket = ToTerm("[");
 
-                var SymbolRightBracket = ToTerm("]");
+                BnfTerm SymbolRightBracket = ToTerm("]");
 
                 // Operadores (Aritmeticos)
 
-                var OperatorPlus = ToTerm("+");
+                BnfTerm OperatorPlus = ToTerm("+");
 
-                var OperatorMinus = ToTerm("-");
+                BnfTerm OperatorMinus = ToTerm("-");
 
-                var OperatorMult = ToTerm("*");
+                BnfTerm OperatorMult = ToTerm("*");
 
-                var OperatorDiv = ToTerm("/");
+                BnfTerm OperatorDiv = ToTerm("/");
 
-                var OperatorMod = ToTerm("%");
+                BnfTerm OperatorMod = ToTerm("%");
 
                 // Operadores (Relacionales)
 
-                var OperatorGreater = ToTerm(">");
+                BnfTerm OperatorGreater = ToTerm(">");
 
-                var OperatorLess = ToTerm("<");
+                BnfTerm OperatorLess = ToTerm("<");
 
-                var OperatorGreaterSame = ToTerm(">=");
+                BnfTerm OperatorGreaterSame = ToTerm(">=");
 
-                var OperatorLessSame = ToTerm("<=");
+                BnfTerm OperatorLessSame = ToTerm("<=");
 
-                var OperatorEqual = ToTerm("=");
+                BnfTerm OperatorEqual = ToTerm("=");
 
-                var OperatorDiffer = ToTerm("<>");
+                BnfTerm OperatorDiffer = ToTerm("<>");
 
                 // Operadores (Lógicos)
 
-                var OperatorAnd = ToTerm("and");
+                BnfTerm OperatorAnd = ToTerm("and");
 
-                var OperatorOr = ToTerm("or");
+                BnfTerm OperatorOr = ToTerm("or");
 
-                var OperatorNot = ToTerm("not");
+                BnfTerm OperatorNot = ToTerm("not");                
 
-                // Precedencia
-
-                RegisterOperators(1, OperatorNot);
-
-                RegisterOperators(2, OperatorOr);
-
-                RegisterOperators(3, OperatorAnd);
-
-                RegisterOperators(4, OperatorEqual, OperatorDiffer);
-
-                RegisterOperators(5, OperatorGreaterSame, OperatorLessSame, OperatorGreater, OperatorLess);
-                
-                RegisterOperators(6, OperatorPlus, OperatorMinus);
-
-                RegisterOperators(7, OperatorMult, OperatorDiv);
-
-                RegisterOperators(8, OperatorMod);
-
-                // Terminales Fuera De La Gramatica
-
-                NonGrammarTerminals.Add(OneLineComment);
-
-                NonGrammarTerminals.Add(MultiLineComment1);
-
-                NonGrammarTerminals.Add(MultiLineComment2);
-
-            #endregion
+            #endregion            
 
             // Región No Terminales 
 
@@ -216,6 +177,10 @@ namespace Proyecto1.Irony_Resources
 
                 NonTerminal Instruccion = new NonTerminal("Instruccion");
 
+                // Lista De Instrucciones
+                
+                NonTerminal InsProgram = new NonTerminal("InsProgram");
+
             #endregion
 
             // Región De Gramatica 
@@ -223,26 +188,60 @@ namespace Proyecto1.Irony_Resources
             #region Grammar
 
                 // Inicio 
-
-                Begin.Rule = Instruccions;
-
-                // Instrucciones
-
-                Instruccions.Rule = Instruccions + Instruccion
-                                  | Instruccion
-                                  ;
+                Begin.Rule              = Instruccions + Eof
+                                        | Eof
+                                        ;
 
                 // Lista De Instrucciones 
-                Instruccion.Rule = SimpleIdentifier + SymbolSemiColon;
+                Instruccions.Rule       = Instruccions + Instruccion
+                                        | Instruccion
+                                        ;
+
+                // Instruccion Individual 
+                Instruccion.Rule        = InsProgram
+                                        ;
+
+                 // Producción De Errores 
+                Instruccion.ErrorRule   = SyntaxError + SymbolSemiColon
+                                        ;
+
+                // Instruccion Program 
+                InsProgram.Rule         = ReservedProgram + SimpleIdentifier + SymbolSemiColon
+                                        ;                
 
             #endregion
 
             // Región De Preferencias 
             #region Preferences
 
-                // Inicio Del Arbol 
-                
-                this.Root = Begin;
+                // Inicio Del Arbol                 
+                Root = Begin;
+
+                // Marcar Palabras Reservadas 
+                MarkReservedWords("program", "if");
+            
+                // Precedencia
+                RegisterOperators(1, Associativity.Left, OperatorNot);
+
+                RegisterOperators(2, Associativity.Left, OperatorOr);
+
+                RegisterOperators(3, Associativity.Left, OperatorAnd);
+
+                RegisterOperators(4, Associativity.Left, OperatorEqual, OperatorDiffer);
+
+                RegisterOperators(5, Associativity.Left, OperatorGreaterSame, OperatorLessSame, OperatorGreater, OperatorLess);
+
+                RegisterOperators(6, Associativity.Left, OperatorPlus, OperatorMinus);
+
+                RegisterOperators(7, Associativity.Left, OperatorMult, OperatorDiv);
+
+                RegisterOperators(8, Associativity.Left, OperatorMod);
+
+                //NonGrammarTerminals.Add(OneLineComment);
+
+                //NonGrammarTerminals.Add(MultiLineComment1);
+
+                //NonGrammarTerminals.Add(MultiLineComment2);
 
             #endregion
 
