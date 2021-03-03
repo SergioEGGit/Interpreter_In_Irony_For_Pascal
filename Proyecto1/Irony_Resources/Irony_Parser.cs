@@ -1,4 +1,4 @@
-﻿// ------------------------------------------ Librerias E Imports --------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports -----------------------------------------------
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using Irony.Parsing;
 using Proyecto1.TranslatorAndInterpreter;
 using Proyecto1.Misc;
 
-// ------------------------------------------------ NameSpace -----------------------------------------------
+// ------------------------------------------------ NameSpace ---------------------------------------------------
 namespace Proyecto1.Irony_Resources
 {
     
@@ -20,64 +20,234 @@ namespace Proyecto1.Irony_Resources
 
         // Analizador Sintactico 
 
-        // Instrucciones
-        public LinkedList<AbstractInstruccion> Instruccions(ParseTreeNode ActualNode) {
+        // Inicio 
+        public void Begin(ParseTreeNode RootNode) { 
 
-            // Variables 
-            LinkedList<AbstractInstruccion> AuxiliaryList = new LinkedList<AbstractInstruccion>();
-            
-            // Verificar Gramatica
+            // Verificar Cantidad De Nodos 
+            if (RootNode.ChildNodes.Count == 2)
+            {
+
+                // Instruccion Program 
+                InsProgram(RootNode.ChildNodes.ElementAt(0));//guarda lo que retorna? por el momento si pero seria de reto
+                //esto guardado en PROGRAM
+                // Declaraciones
+                Declarations(RootNode.ChildNodes.ElementAt(1));
+                //esto GUARDADO en DECLARACIONES
+                //por ejemplo aqui harias algo asi
+                //return new InicioAbsoluto(PROGRAM,DECLARACION,Funcion no hay entonces []| null,Begin tampoco entonces [] | null)
+
+            }
+            else if(RootNode.ChildNodes.Count == 1) {
+
+                // Instruccion Program 
+                InsProgram(RootNode.ChildNodes.ElementAt(0));
+                //Esto guardado en PROGRAM
+                //return new InicioAbsoluto(PROGRAM,Declaracoipnes no hay emtomces null o [],Funcion no hay entonces []| null,Begin tampoco entonces [] | null)
+                //si te das cuenta retorno un objeto para que cuando llemes a begin hagas esto
+                // astRaiz=Begin(raiz de irony)
+                // astRaiz.Traducir()
+                // astRaiz.Ejecutar()
+                // y no guardemos en una lista cosas  
+                // creo que te entedi jaja es que yo estaba viendo el ejemplo del erik jaja 
+                // y como lo hace?
+            }
+            else {
+
+                // No Se Hace Nada    
+
+            }        
+            //este te tiene que retornar un objeto de tipo ASTInicioClase por ejemplo
+            //que reciba paramtros 
+        
+        }
+
+        // Instruccion Programa 
+        public void InsProgram(ParseTreeNode ActualNode)
+        {
+
+            // Obtener Identificador -> Sintaxis: program ID ;
+            String InsProgramIdentifier = ActualNode.ChildNodes.ElementAt(1).ToString().Split(' ')[0];
+
+            // Agregar Valor A La Lista  
+            Variables.TranslateList.AddLast(new InsProgram(InsProgramIdentifier));
+
+        }
+
+        // Declaraciones 
+        public void Declarations(ParseTreeNode ActualNode) {
 
             // Si Es Igual A Dos Primera Produccion De Lo Contrario Segunda Produccion
-            if(ActualNode.ToString().Equals("Instruccions"))
+            if (ActualNode.ChildNodes.Count == 2)
             {
 
                 // Obtener Lista De Instrucciones 
-                AuxiliaryList = Instruccions(ActualNode.ChildNodes.ElementAt(0));
+                Declarations(ActualNode.ChildNodes.ElementAt(0));
 
                 // Agregar Instruccion Al Final 
-                AuxiliaryList.AddLast(Instruccion(ActualNode.ChildNodes.ElementAt(1)));
+                Declaration(ActualNode.ChildNodes.ElementAt(1));
+
+            }
+            else
+            {
+
+                // Agregar Instruccion Al Final 
+                Declaration(ActualNode.ChildNodes.ElementAt(0));
+
+            }
+
+        }
+
+        // Declaracion 
+        public void Declaration(ParseTreeNode ActualNode)
+        {
+
+            // Obtener Token Actual 
+            String Token1 = ActualNode.ChildNodes.ElementAt(0).ToString();
+
+            // Verificar Instruccion 
+            switch (Token1)
+            {
+
+                // Caso No.1 
+                case "VariablesDeclaration":
+
+                    // Llamar A Metodo Variables Declaration
+                    VariablesDeclarations(ActualNode.ChildNodes.ElementAt(0));
+
+                    break;
+
+                // Caso No.2 
+                case "ConstantsDeclaration":
+
+                    // Llamar A Metodo Constants Declaration
+                    MessageBox.Show(Token1);
+
+                    break;
+
+            }
+
+        }
+
+        // Variables Declaration
+        public void VariablesDeclarations(ParseTreeNode ActualNode) {
+
+            // Llamar A Metodo Bloque Variables 
+            VariablesDeclarationsBlock(ActualNode.ChildNodes.ElementAt(1));
+        
+        }
+
+        // Bloque Variables Declaration 
+        public void VariablesDeclarationsBlock(ParseTreeNode ActualNode) {
+
+            // Verificar Numero De Terminales 
+            if (ActualNode.ChildNodes.Count == 2)
+            {
+
+                // Lista De Declaraciones 
+                VariablesDeclarationsBlock(ActualNode.ChildNodes.ElementAt(0));
+
+                // Declaracion
+                VariablesDeclarationsList(ActualNode.ChildNodes.ElementAt(1));
+
+            }
+            else {
+
+                // Declaracion 
+                VariablesDeclarationsList(ActualNode.ChildNodes.ElementAt(0));
+            
+            }
+        
+        }
+
+        // Lista De Declaraciones 
+        public void VariablesDeclarationsList(ParseTreeNode ActualNode) {
+
+            // Lista De Declaraciones 
+            DeclarationsList(ActualNode.ChildNodes.ElementAt(0));
+        
+        }
+
+        // Lista De Declaraciones 
+        public void DeclarationsList(ParseTreeNode ActualNode) {
+
+            // Verificar Cantidad De Nodos 
+            if (ActualNode.ChildNodes.Count == 3)
+            {
+
+                // Declaration List 
+                DeclarationsList(ActualNode.ChildNodes.ElementAt(0));
+
+                // Obtener Identificador 
+                MessageBox.Show(ActualNode.ChildNodes.ElementAt(2).ToString()); // aqui esta cosa 3, y luego cosa 4
+                //var 
+                //cosa : lo que sea
+                // cosa2,cosa3 :Lo que sea
+                //entoces el va a venir y va a encontrar cosa entra al else
+                //aqui que estaria? cosa 2 y un nodo mas para cosa 3 entra al metodo recursivo
+                //retornamos declaracion de cosa 2 uniendolo a declaracion de cosa3
+                //es decir que podes retornar unicamente el nombre o algo por el estlo
+                //return new Declaracion(Declaracion cosa2,Declaracion Cosa3,Tipo);
+                //me entendiste?
+                // osea si y No jaja es que te vas al final de una empezos por pasos XD 
+                // yo soy imbecil XD voy inventando sobre la marcha osea yo ya lo vi y ya lo entendi XD
+
+                //Abrite paint jaja el retorno si lo entedi l oque aun no entiendo es esto mira pues jaja 
+            }
+            else {
+
+                // Obtener Identificador 
+                MessageBox.Show(ActualNode.ChildNodes.ElementAt(0).ToString()); // aqui esta cosa 1, y luego la 2 
+                //retorna objeto con declaracion de cosa primera vez
+                //retorna objeto con declaracion de cosa3 segunda vez
+                
+            }            
+
+        }
+
+        // Instrucciones
+        public void Instruccions(ParseTreeNode ActualNode) {
+
+            // Si Es Igual A Dos Primera Produccion De Lo Contrario Segunda Produccion
+            if(ActualNode.ChildNodes.ElementAt(0).ToString().Equals("Instruccions"))
+            {
+
+                // Obtener Lista De Instrucciones 
+                Instruccions(ActualNode.ChildNodes.ElementAt(0));
+
+                // Agregar Instruccion Al Final 
+                Instruccion(ActualNode.ChildNodes.ElementAt(1));
 
             }
             else 
             {
              
                 // Agregar Instruccion Al Final 
-                AuxiliaryList.AddLast(Instruccion(ActualNode.ChildNodes.ElementAt(0)));
+                Instruccion(ActualNode.ChildNodes.ElementAt(0));
             
             }
-
-            // Retornar Valor 
-            return AuxiliaryList;
         
         }
 
         // Instruccion 
-        public AbstractInstruccion Instruccion(ParseTreeNode ActualNode) {
+        public void Instruccion(ParseTreeNode ActualNode) {
 
             // Obtener Token Actual 
             String Token1 = ActualNode.ChildNodes.ElementAt(0).ToString();
 
             // Verificar Instruccion 
-            return Token1 switch
+            switch(Token1)
             {
 
-                // Caso 1
-                "InsProgram" => InsProgram(ActualNode.ChildNodes.ElementAt(0)),
+                // Caso No.1 
+                case "InsProgram":
 
-                // Caso Default
-                _ => null,
+                        // Llamar A Metodo InsProgram
+                        InsProgram(ActualNode.ChildNodes.ElementAt(0));
+
+                    break;
+
+            }   
             
-            };
-
-        }
-
-        // Instruccion Programa 
-        public AbstractInstruccion InsProgram(ParseTreeNode ActualNode) {
-
-            // Retornar Valor 
-            return new InsProgram();            
-
         }
 
         // Misc 
@@ -164,15 +334,21 @@ namespace Proyecto1.Irony_Resources
                 // Verificar Si El Archivo No Esta Vacio
                 if(RootTreeNode.ChildNodes.Count > 0) {
 
+                    // Limpiar Lista De Errores 
+                    Variables.TranslateList = new LinkedList<AbstractInstruccion>();
+
+                    // Limpiar Variable Traduccion 
+                    Variables.TranslateString = "";
+                    
                     // Ejecutar Recorrido Del Arbol 
-                    LinkedList<AbstractInstruccion> AuxiliaryList = Instruccions(RootTreeNode.ChildNodes.ElementAt(0));
+                    //Begin(RootTreeNode);
 
                     // Recorrido Para Traducir 
-                    foreach (var ItemTranslate in AuxiliaryList)
+                    foreach (var ItemTranslate in Variables.TranslateList)
                     {
 
                         // Llamar A Método Traducir 
-                        // ItemTranslate.Translate();
+                        //ItemTranslate.Translate();
 
                     }
 

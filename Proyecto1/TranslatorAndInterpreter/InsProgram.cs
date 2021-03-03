@@ -1,7 +1,8 @@
-﻿// ------------------------------------------ Librerias E Imports --------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports -----------------------------------------------
+using System;
+using Proyecto1.Misc;
 
-
-// ------------------------------------------------ NameSpace ------------------------------------------------
+// ------------------------------------------------ NameSpace ---------------------------------------------------
 namespace Proyecto1.TranslatorAndInterpreter
 {
 
@@ -9,10 +10,14 @@ namespace Proyecto1.TranslatorAndInterpreter
     class InsProgram : AbstractInstruccion
     {
 
+        // Atributos
+        public String IdentifierInsProgram;
+
         // Constructor 
-        public InsProgram() { 
-        
-        
+        public InsProgram(String IdentifierInsProgram) {
+
+            // Inicializar Valores
+            this.IdentifierInsProgram = IdentifierInsProgram;
         
         }
         
@@ -20,6 +25,7 @@ namespace Proyecto1.TranslatorAndInterpreter
         public override object Execute()
         {
 
+            // No Implementacion
             throw new System.NotImplementedException();
         
         }
@@ -28,7 +34,11 @@ namespace Proyecto1.TranslatorAndInterpreter
         public override object Translate()
         {
 
-            throw new System.NotImplementedException();
+            // Traducción 
+            Variables.TranslateString += "program " + this.IdentifierInsProgram + ";\n\n";
+
+            // Retorno 
+            return null;
 
         }
 

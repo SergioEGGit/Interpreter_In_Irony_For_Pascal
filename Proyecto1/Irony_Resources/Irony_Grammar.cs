@@ -65,7 +65,7 @@ namespace Proyecto1.Irony_Resources
             
                 BnfTerm ReservedType = ToTerm("type");
 
-                BnfTerm ReservedBnfTerm = ToTerm("BnfTerm");
+                BnfTerm ReservedVar = ToTerm("var");
 
                 BnfTerm ReservedBegin = ToTerm("begin");
 
@@ -111,7 +111,7 @@ namespace Proyecto1.Irony_Resources
 
                 BnfTerm ReservedWriteLine = ToTerm("writeline");
 
-                BnfTerm ReserverdGraficar = ToTerm("graficar_ts");
+                BnfTerm ReservedGraficar = ToTerm("graficar_ts");
 
                 // Simbolos (Comunes)
 
@@ -120,6 +120,8 @@ namespace Proyecto1.Irony_Resources
                 BnfTerm SymbolColon = ToTerm(":");
 
                 BnfTerm SymbolComma = ToTerm(",");
+
+                BnfTerm SymbolPoint = ToTerm(".");
 
                 BnfTerm SymbolLeftParenthesis = ToTerm("(");
 
@@ -166,48 +168,110 @@ namespace Proyecto1.Irony_Resources
             #endregion            
 
             // Región No Terminales 
-
             #region NonTerminals
 
-                // Instrucciones Iniciales 
-
+                // Instrucciones Iniciales
                 NonTerminal Begin = new NonTerminal("Begin");
 
                 NonTerminal Instruccions = new NonTerminal("Instruccions");
 
                 NonTerminal Instruccion = new NonTerminal("Instruccion");
 
-                // Lista De Instrucciones
-                
+                NonTerminal Declarations = new NonTerminal("Delcarations");
+
+                NonTerminal Declaration = new NonTerminal("Declaration");
+
+                // Program             
                 NonTerminal InsProgram = new NonTerminal("InsProgram");
 
-            #endregion
+                // Declaracion De Variables             
+                NonTerminal VariablesDeclaration = new NonTerminal("VariablesDeclaration");
 
-            // Región De Gramatica 
+                NonTerminal VariablesDeclarationList = new NonTerminal("VariablesDeclarationList");
 
-            #region Grammar
+                NonTerminal DeclarationList = new NonTerminal("DeclarationList");
 
-                // Inicio 
-                Begin.Rule              = Instruccions + Eof
-                                        | Eof
-                                        ;
+                NonTerminal VariablesDeclarationBlock = new NonTerminal("VariablesDeclarationBlock");
 
-                // Lista De Instrucciones 
-                Instruccions.Rule       = Instruccions + Instruccion
-                                        | Instruccion
-                                        ;
+                NonTerminal Types = new NonTerminal("Types");
 
-                // Instruccion Individual 
-                Instruccion.Rule        = InsProgram
-                                        ;
+                NonTerminal VariableAsignationDec = new NonTerminal("VariableAsginationDec");
 
-                 // Producción De Errores 
-                Instruccion.ErrorRule   = SyntaxError + SymbolSemiColon
-                                        ;
+                NonTerminal VariablesValues = new NonTerminal("VariablesValues");
 
-                // Instruccion Program 
-                InsProgram.Rule         = ReservedProgram + SimpleIdentifier + SymbolSemiColon
-                                        ;                
+                // Constantes 
+                NonTerminal ConstantsDeclaration = new NonTerminal("ConstantsDeclaration");
+
+                NonTerminal ConstantsDeclarationBlock = new NonTerminal("ConstantsDeclarationBlock");
+
+                NonTerminal Constants = new NonTerminal("Constants");
+
+                NonTerminal ConstantsValues = new NonTerminal("ConstantsValues");
+
+                // Asignacion De Variables 
+                NonTerminal VariablesAsignation = new NonTerminal("VariablesAsignation");
+
+                // Bloque Main 
+                NonTerminal MainBlock = new NonTerminal("MainBlock");
+
+                // Misc 
+
+                // Valores Boolean
+                NonTerminal SimpleBoolean = new NonTerminal("SimpleBoolean");
+
+                // Expresiones 
+                NonTerminal Expression = new NonTerminal("Expression");
+
+                // Instruccion If 
+                NonTerminal InsIf = new NonTerminal("InsIf");
+
+                // Instrucciones If 
+                NonTerminal InstruccionsIfCasLo = new NonTerminal("InstruccionsIfCasLo");
+
+                // Instruccion If 
+                NonTerminal InstruccionIfCasLo = new NonTerminal("InstruccionIfCasLo");
+
+                // Bloque If 
+                NonTerminal IfBlock = new NonTerminal("IfBlock");
+
+                // Else 
+                NonTerminal InsElse = new NonTerminal("InsElse");
+
+                // Case 
+                NonTerminal InsCase = new NonTerminal("InsCase");
+
+                // Cases 
+                NonTerminal Cases = new NonTerminal("Cases");
+
+                // Bloque Case 
+                NonTerminal CaseBlock = new NonTerminal("CaseBlock");
+
+                // Case Else 
+                NonTerminal CaseElse = new NonTerminal("CaseElse");
+
+                // While 
+                NonTerminal InsWhile = new NonTerminal("InsWhile");
+
+                // Bloque While
+                NonTerminal WhileBlock = new NonTerminal("WhileBlock");
+
+                // For
+                NonTerminal InsFor = new NonTerminal("InsFor");
+
+                // Bloque For 
+                NonTerminal ForBlock = new NonTerminal("ForBlock");
+
+                // Repeat 
+                NonTerminal InsRepeat = new NonTerminal("InsRepeat");
+
+                // Bloque Repeat
+                NonTerminal RepeatBlock = new NonTerminal("RepeatBlock");
+
+                // Sentencias De Transferencias
+                NonTerminal TransferSentences = new NonTerminal("TransferSenteces");
+
+                // Comentarios
+                //NonTerminal Comments = new NonTerminal("Comentarios");    
 
             #endregion
 
@@ -217,9 +281,23 @@ namespace Proyecto1.Irony_Resources
                 // Inicio Del Arbol                 
                 Root = Begin;
 
+                // Diccionario De Palabras Reservadas 
+                string[] DictionaryReservedWords =  {
+
+                                                            "program",
+                                                            "var",
+                                                            "string",
+                                                            "integer",
+                                                            "real",
+                                                            "boolean",
+                                                            "true",
+                                                            "false"
+
+                                                        };
+
                 // Marcar Palabras Reservadas 
-                MarkReservedWords("program", "if");
-            
+                MarkReservedWords(DictionaryReservedWords);
+
                 // Precedencia
                 RegisterOperators(1, Associativity.Left, OperatorNot);
 
@@ -237,13 +315,261 @@ namespace Proyecto1.Irony_Resources
 
                 RegisterOperators(8, Associativity.Left, OperatorMod);
 
-                //NonGrammarTerminals.Add(OneLineComment);
+                // Excluir Comentarios De La Gramatica 
+                NonGrammarTerminals.Add(OneLineComment);
 
-                //NonGrammarTerminals.Add(MultiLineComment1);
+                NonGrammarTerminals.Add(MultiLineComment1);
 
-                //NonGrammarTerminals.Add(MultiLineComment2);
+                NonGrammarTerminals.Add(MultiLineComment2);
 
             #endregion
+
+            // Región De Gramatica 
+            #region Grammar
+
+                // Inicio 
+                Begin.Rule                      = InsProgram + Declarations + MainBlock
+                                                | InsProgram + MainBlock
+                                                | Eof
+                                                ;
+
+                // Errores Inicio 
+                Begin.ErrorRule                 = SyntaxError + SymbolSemiColon
+                                                | SyntaxError + ReservedEnd
+                                                ;
+
+                // Main Block 
+                MainBlock.Rule                  = ReservedBegin + Instruccions + ReservedEnd + SymbolPoint
+                                                | ReservedBegin + ReservedEnd + SymbolPoint
+                                                ;
+
+                // Produccion De Error 
+                MainBlock.ErrorRule             = SyntaxError + SymbolSemiColon
+                                                | SyntaxError + ReservedEnd
+                                                ;
+
+                // Instruccion Program 
+                InsProgram.Rule                 = ReservedProgram + SimpleIdentifier + SymbolSemiColon  
+                                                ;
+
+                // Lista De Declaraciones
+                Declarations.Rule               = Declarations + Declaration 
+                                                | Declaration
+                                                ;
+
+                // Declaracion Individual
+                Declaration.Rule                = VariablesDeclaration
+                                                | ConstantsDeclaration
+                                                ;
+
+                // Producción De Errores 
+                Declaration.ErrorRule          = SyntaxError + SymbolSemiColon
+                                               | SyntaxError + ReservedEnd
+                                               ;
+
+                // Declaracion De Variables
+                VariablesDeclaration.Rule       = ReservedVar + VariablesDeclarationBlock
+                                                ;
+            
+                // Bloque Declaraciones 
+                VariablesDeclarationBlock.Rule  = VariablesDeclarationBlock + VariablesDeclarationList
+                                                | VariablesDeclarationList
+                                                ;
+
+                // Lista De Declaraciones Sintaxis
+                VariablesDeclarationList.Rule   = DeclarationList + SymbolColon + Types + VariableAsignationDec
+                                                ;
+
+                // Lista De Delcaraciones 
+                DeclarationList.Rule            = DeclarationList + SymbolComma + SimpleIdentifier  
+                                                | SimpleIdentifier
+                                                ;
+
+                // Tipos De Datos 
+                Types.Rule                      = StringType
+                                                | IntegerType
+                                                | RealType
+                                                | BooleanType
+                                                ;
+
+                // Valores Boolean 
+                SimpleBoolean.Rule              = ReservedTrue
+                                                | ReservedFalse
+                                                ;
+
+                // Asignacion De Variables En Declaracion
+                VariableAsignationDec.Rule      = OperatorEqual + VariablesValues + SymbolSemiColon
+                                                | SymbolSemiColon
+                                                ;
+
+                // Valores Para Las Variables 
+                VariablesValues.Rule            = SimpleString
+                                                | SimpleInteger
+                                                | SimpleReal
+                                                | SimpleBoolean
+                                                | SimpleIdentifier
+                                                ;
+                // Constantes 
+                ConstantsDeclaration.Rule       = ReservedConst + ConstantsDeclarationBlock
+                                                ;
+
+                // Bloque Constantes 
+                ConstantsDeclarationBlock.Rule  = ConstantsDeclarationBlock + Constants
+                                                | Constants
+                                                ;
+
+                // Declaracion De Una Constante 
+                Constants.Rule                  = SimpleIdentifier + OperatorEqual + ConstantsValues + SymbolSemiColon
+                                                ;
+
+                // Valores De Las Constantes 
+                ConstantsValues.Rule            = SimpleString
+                                                | SimpleInteger
+                                                | SimpleReal
+                                                | SimpleBoolean
+                                                ;
+
+                // Instrucciones 
+                Instruccions.Rule               = Instruccions + Instruccion
+                                                | Instruccion
+                                                ;
+
+                // Instruccion 
+                Instruccion.Rule                = VariablesAsignation
+                                                | InsIf
+                                                | InsCase
+                                                | InsWhile
+                                                | InsFor
+                                                | InsRepeat
+                                                ;
+
+                // Producción De Error 
+                Instruccion.ErrorRule           = SyntaxError + SymbolSemiColon
+                                                | SyntaxError + ReservedEnd
+                                                ;
+
+                // Asignacion De Variables 
+                VariablesAsignation.Rule        = SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
+                                                ;
+
+                // If Else 
+                InsIf.Rule                      = ReservedIf + SymbolLeftParenthesis + Expression + SymbolRightParenthesis + ReservedThen + IfBlock + InsElse
+                                                ;
+
+                // Bloque if 
+                IfBlock.Rule                    = ReservedBegin + InstruccionsIfCasLo + ReservedEnd
+                                                | ReservedBegin + ReservedEnd
+                                                ;
+
+                // Produccion De Error
+                IfBlock.ErrorRule               = SyntaxError + SymbolSemiColon
+                                                | SyntaxError + ReservedEnd
+                                                ;
+
+                // Else 
+                InsElse.Rule                    = ReservedElse + IfBlock + SymbolSemiColon
+                                                | ReservedElse + InsIf
+                                                | SymbolSemiColon
+                                                ;
+
+                // Instrucciones If
+                InstruccionsIfCasLo.Rule         = InstruccionsIfCasLo + InstruccionIfCasLo
+                                                | InstruccionIfCasLo
+                                                ;
+
+                // Instruccion If 
+                InstruccionIfCasLo.Rule         = VariablesAsignation
+                                                | InsIf
+                                                | InsCase
+                                                | InsWhile
+                                                | InsFor
+                                                | InsRepeat
+                                                | TransferSentences
+                                                ;
+
+                // Produccion De Error 
+                InstruccionIfCasLo.ErrorRule    = SyntaxError + SymbolSemiColon 
+                                                | SyntaxError + ReservedEnd
+                                                ;
+
+                // Case 
+                InsCase.Rule                    = ReservedCase + SymbolLeftParenthesis + Expression + SymbolRightParenthesis + ReservedOf + Cases
+                                                ;
+
+                // Casos 
+                Cases.Rule                      = Expression + SymbolColon + CaseBlock + CaseElse
+                                                ;
+
+                // Bloque Case 
+                CaseBlock.Rule                  = ReservedBegin + InstruccionsIfCasLo + ReservedEnd + SymbolSemiColon
+                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                ;
+
+                // Case Else 
+                CaseElse.Rule                   = ReservedElse + ReservedBegin + InstruccionsIfCasLo + ReservedEnd + SymbolSemiColon + ReservedEnd + SymbolSemiColon
+                                                | ReservedEnd + SymbolSemiColon
+                                                | Cases
+                                                ;
+
+                // While Do 
+                InsWhile.Rule                   = ReservedWhile + Expression + ReservedDo + WhileBlock
+                                                ;
+
+                // While Block
+                WhileBlock.Rule                 = ReservedBegin + InstruccionIfCasLo + ReservedEnd + SymbolSemiColon
+                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                ;
+
+                // For 
+                InsFor.Rule                     = ReservedFor + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + ReservedTo + Expression + ReservedDo + ForBlock
+                                                ;
+
+                // Bloque For 
+                ForBlock.Rule                   = ReservedBegin + InstruccionIfCasLo + ReservedEnd + SymbolSemiColon
+                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                ;
+
+                // Until Repeat
+                InsRepeat.Rule                  = ReservedRepeat + RepeatBlock + ReservedUntil + Expression + SymbolSemiColon
+                                                ;
+
+                // Bloque Repeat 
+                RepeatBlock.Rule                = ReservedBegin + InstruccionIfCasLo + ReservedEnd + SymbolSemiColon
+                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                ;
+
+                // Sentecia De Transeferencias
+                TransferSentences.Rule          = ReservedBreak
+                                                | ReservedContinue
+                                                ;
+
+                // Expresiones 
+                Expression.Rule                 = SymbolLeftParenthesis + Expression + SymbolRightParenthesis 
+                                                | Expression + OperatorPlus + Expression
+                                                | Expression + OperatorMinus + Expression
+                                                | Expression + OperatorMult + Expression
+                                                | Expression + OperatorDiv + Expression
+                                                | Expression + OperatorMod + Expression 
+                                                | OperatorMinus + Expression
+                                                | OperatorNot + Expression
+                                                | Expression + OperatorLessSame + Expression
+                                                | Expression + OperatorGreaterSame + Expression
+                                                | Expression + OperatorLess + Expression
+                                                | Expression + OperatorGreater + Expression
+                                                | Expression + OperatorEqual + Expression
+                                                | Expression + OperatorDiffer + Expression
+                                                | Expression + OperatorAnd + Expression
+                                                | Expression + OperatorOr + Expression
+                                                | VariablesValues
+                                                ;
+
+                // Instruccion Comentarios 
+                //Comments.Rule               = OneLineComment
+                //                            | MultiLineComment1
+                //                            | MultiLineComment2
+                //                            ;
+
+            #endregion   
 
         }
 
