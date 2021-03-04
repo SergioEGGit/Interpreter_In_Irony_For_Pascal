@@ -53,7 +53,7 @@ namespace Proyecto1.Irony_Resources
              
                 BnfTerm VoidType = ToTerm("void");
 
-                BnfTerm ObjetcType = ToTerm("object");
+                BnfTerm ObjectType = ToTerm("object");
           
                 BnfTerm ArrayType = ToTerm("array");
 
@@ -130,6 +130,8 @@ namespace Proyecto1.Irony_Resources
                 BnfTerm SymbolLeftBracket = ToTerm("[");
 
                 BnfTerm SymbolRightBracket = ToTerm("]");
+
+                BnfTerm SymbolDoublePoint = ToTerm("..");
 
                 // Operadores (Aritmeticos)
 
@@ -270,6 +272,45 @@ namespace Proyecto1.Irony_Resources
                 // Sentencias De Transferencias
                 NonTerminal TransferSentences = new NonTerminal("TransferSenteces");
 
+                // Funciones 
+                NonTerminal Functions = new NonTerminal("Funtions");
+
+                // Bloque Funcioens 
+                NonTerminal FunctionsBlock = new NonTerminal("FunctionsBlock");
+
+                // Delcaracion De Parametros
+                NonTerminal ParamListDeclaration = new NonTerminal("ParamListDeclaration");
+
+                // Lista De Parametros 
+                NonTerminal ParamDecList = new NonTerminal("ParamDecList");
+
+                // Parametros 
+                NonTerminal ParamsDec = new NonTerminal("ParamsDec");
+
+                // Fin Del Parametro
+                NonTerminal ParamEnd = new NonTerminal("ParamEnd");
+
+                // Exit Sentece
+                NonTerminal ExitSentence = new NonTerminal("ExitSentece");
+
+                // Lista De Parametros Valores
+                NonTerminal ParamsValueList = new NonTerminal("ParamsValueList");
+
+                // Lista De Decalraciones
+                NonTerminal FunctionsDeclarations = new NonTerminal("FunctionsDeclarations");
+
+                // Write
+                NonTerminal InsWrite = new NonTerminal("InsWrite");
+
+                // Graficar 
+                NonTerminal InsGraficarTS = new NonTerminal("InsGraficarTS");
+
+                // Objetos Arrays 
+                NonTerminal ArraysObjects = new NonTerminal("ArraysOjects");
+
+                // Seleccionar Tipo type 
+                NonTerminal TypeOfTypes = new NonTerminal("TypeOfTypes");
+
                 // Comentarios
                 //NonTerminal Comments = new NonTerminal("Comentarios");    
 
@@ -284,16 +325,44 @@ namespace Proyecto1.Irony_Resources
                 // Diccionario De Palabras Reservadas 
                 string[] DictionaryReservedWords =  {
 
-                                                            "program",
-                                                            "var",
                                                             "string",
                                                             "integer",
                                                             "real",
                                                             "boolean",
+                                                            "object",
+                                                            "array",
+                                                            "program",
+                                                            "end",
+                                                            "type",
+                                                            "var",
+                                                            "begin",
+                                                            "of",
+                                                            "const",
                                                             "true",
-                                                            "false"
+                                                            "false",
+                                                            "if",
+                                                            "then",
+                                                            "else",
+                                                            "case",
+                                                            "while",
+                                                            "do",
+                                                            "to",
+                                                            "for",
+                                                            "repeat",
+                                                            "until",
+                                                            "break",
+                                                            "continue",
+                                                            "function",
+                                                            "procedure",
+                                                            "exit",
+                                                            "write",
+                                                            "writeline",
+                                                            "graficar_ts",
+                                                            "and",
+                                                            "or",
+                                                            "not"
 
-                                                        };
+                                                   };
 
                 // Marcar Palabras Reservadas 
                 MarkReservedWords(DictionaryReservedWords);
@@ -360,12 +429,23 @@ namespace Proyecto1.Irony_Resources
                 // Declaracion Individual
                 Declaration.Rule                = VariablesDeclaration
                                                 | ConstantsDeclaration
+                                                | Functions  
+                                                | ArraysObjects
                                                 ;
 
                 // Producción De Errores 
                 Declaration.ErrorRule          = SyntaxError + SymbolSemiColon
                                                | SyntaxError + ReservedEnd
                                                ;
+
+                // Array Objects 
+                ArraysObjects.Rule              = ReservedType + SimpleIdentifier + OperatorEqual + TypeOfTypes
+                                                ;
+
+                // Choose Type 
+                TypeOfTypes.Rule                = ObjectType + VariablesDeclaration + ReservedEnd + SymbolSemiColon
+                                                | ArrayType + SymbolLeftBracket + Expression + SymbolDoublePoint + Expression + SymbolRightBracket + ReservedOf + Types + SymbolSemiColon
+                                                ;
 
                 // Declaracion De Variables
                 VariablesDeclaration.Rule       = ReservedVar + VariablesDeclarationBlock
@@ -390,6 +470,7 @@ namespace Proyecto1.Irony_Resources
                                                 | IntegerType
                                                 | RealType
                                                 | BooleanType
+                                                | SimpleIdentifier
                                                 ;
 
                 // Valores Boolean 
@@ -408,7 +489,16 @@ namespace Proyecto1.Irony_Resources
                                                 | SimpleReal
                                                 | SimpleBoolean
                                                 | SimpleIdentifier
+                                                | SimpleIdentifier + SymbolPoint + SimpleIdentifier
+                                                | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis
+                                                | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis
                                                 ;
+
+                // Params List 
+                ParamsValueList.Rule            = ParamsValueList + SymbolComma + Expression
+                                                | Expression
+                                                ;
+
                 // Constantes 
                 ConstantsDeclaration.Rule       = ReservedConst + ConstantsDeclarationBlock
                                                 ;
@@ -441,6 +531,8 @@ namespace Proyecto1.Irony_Resources
                                                 | InsWhile
                                                 | InsFor
                                                 | InsRepeat
+                                                | InsWrite
+                                                | InsGraficarTS
                                                 ;
 
                 // Producción De Error 
@@ -450,10 +542,13 @@ namespace Proyecto1.Irony_Resources
 
                 // Asignacion De Variables 
                 VariablesAsignation.Rule        = SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
+                                                | SimpleIdentifier + SymbolPoint + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
+                                                | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
                                                 ;
 
                 // If Else 
-                InsIf.Rule                      = ReservedIf + SymbolLeftParenthesis + Expression + SymbolRightParenthesis + ReservedThen + IfBlock + InsElse
+                InsIf.Rule                      = ReservedIf + Expression + ReservedThen + IfBlock + InsElse
                                                 ;
 
                 // Bloque if 
@@ -485,6 +580,9 @@ namespace Proyecto1.Irony_Resources
                                                 | InsFor
                                                 | InsRepeat
                                                 | TransferSentences
+                                                | ExitSentence
+                                                | InsWrite
+                                                | InsGraficarTS
                                                 ;
 
                 // Produccion De Error 
@@ -539,10 +637,67 @@ namespace Proyecto1.Irony_Resources
                                                 ;
 
                 // Sentecia De Transeferencias
-                TransferSentences.Rule          = ReservedBreak
-                                                | ReservedContinue
+                TransferSentences.Rule          = ReservedBreak + SymbolSemiColon
+                                                | ReservedContinue + SymbolSemiColon
                                                 ;
 
+                // Funciones Y Procedimientos
+                Functions.Rule                  = ReservedFunction + SimpleIdentifier + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
+                                                | ReservedProcedure + SimpleIdentifier + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
+                                                | ReservedFunction + SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations  + FunctionsBlock
+                                                | ReservedProcedure + SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon + FunctionsDeclarations  + FunctionsBlock
+                                                | ReservedFunction + SimpleIdentifier + SymbolLeftParenthesis + ParamListDeclaration  + SymbolRightParenthesis + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations  + FunctionsBlock
+                                                | ReservedProcedure + SimpleIdentifier + SymbolLeftParenthesis + ParamListDeclaration + SymbolRightParenthesis + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
+                                                ;
+                // Funciones Declarations
+                FunctionsDeclarations.Rule      = Declarations
+                                                | Empty
+                                                ;
+
+                // Bloque Funciones 
+                FunctionsBlock.Rule             = ReservedBegin + InstruccionsIfCasLo + ReservedEnd + SymbolSemiColon
+                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                ;
+
+                // Lista De Parametros
+                ParamListDeclaration.Rule       = ParamListDeclaration + ParamDecList
+                                                | ParamDecList
+                                                ;
+
+                // Lista De Declaraciones Sintaxis
+                ParamDecList.Rule               = ParamsDec + SymbolColon + Types + ParamEnd
+                                                ;
+
+                // Fin Parametro             
+                ParamEnd.Rule                   = SymbolSemiColon 
+                                                | Empty  
+                                                ;
+
+                // Return Exit
+                ExitSentence.Rule               = ReservedExit + SymbolLeftParenthesis + Expression + SymbolRightParenthesis + SymbolSemiColon
+                                                | ReservedExit + SymbolSemiColon
+                                                ;
+
+                // Lista De Delcaraciones 
+                ParamsDec.Rule                  = ParamsDec + SymbolComma + SimpleIdentifier
+                                                | ReservedVar + SimpleIdentifier
+                                                | SimpleIdentifier
+                                                ;
+
+                // Imprimir En Consola
+                InsWrite.Rule                   = ReservedWrite + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
+                                                | ReservedWrite + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                | ReservedWrite + SymbolSemiColon
+                                                | ReservedWriteLine + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
+                                                | ReservedWriteLine + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                | ReservedWriteLine + SymbolSemiColon
+                                                ;
+
+                // Graficar Ts 
+                InsGraficarTS.Rule              = ReservedGraficar + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                | ReservedGraficar + SymbolSemiColon
+                                                ;
+            
                 // Expresiones 
                 Expression.Rule                 = SymbolLeftParenthesis + Expression + SymbolRightParenthesis 
                                                 | Expression + OperatorPlus + Expression
