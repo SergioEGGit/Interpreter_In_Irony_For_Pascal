@@ -1,7 +1,7 @@
-﻿// ------------------------------------------ Librerias E Imports -----------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
+using Proyecto1.Misc;
 
-
-// ------------------------------------------------ NameSpace ---------------------------------------------------
+// ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.TranslatorAndInterpreter
 {
    
@@ -12,11 +12,11 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Creación De Metodos Abstractos 
         
         // Método Traducir 
-        public abstract object Translate();
+        public abstract object Translate(EnviromentTable Env);
 
         // Método Ejecutar 
-        public abstract object Execute();
+        public abstract object Execute(EnviromentTable Env);
 
     }
-
+    
 }

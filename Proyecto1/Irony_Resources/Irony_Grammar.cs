@@ -1,7 +1,7 @@
-﻿// ------------------------------------------ Librerias E Imports --------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
 using Irony.Parsing;
 
-// ------------------------------------------------ NameSpace ------------------------------------------------
+// ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.Irony_Resources
 {
     
@@ -35,6 +35,9 @@ namespace Proyecto1.Irony_Resources
 
                 // Real 
                 RegexBasedTerminal SimpleReal = new RegexBasedTerminal("SimpleReal", "[0-9]+'.'[0-9]+");
+
+                // Boolean 
+                RegexBasedTerminal SimpleBoolean = new RegexBasedTerminal("SimpleBoolean", "true|false");
 
             #endregion
 
@@ -179,7 +182,7 @@ namespace Proyecto1.Irony_Resources
 
                 NonTerminal Instruccion = new NonTerminal("Instruccion");
 
-                NonTerminal Declarations = new NonTerminal("Delcarations");
+                NonTerminal Declarations = new NonTerminal("Declarations");
 
                 NonTerminal Declaration = new NonTerminal("Declaration");
 
@@ -219,7 +222,7 @@ namespace Proyecto1.Irony_Resources
                 // Misc 
 
                 // Valores Boolean
-                NonTerminal SimpleBoolean = new NonTerminal("SimpleBoolean");
+                //NonTerminal SimpleBoolean = new NonTerminal("SimpleBoolean");
 
                 // Expresiones 
                 NonTerminal Expression = new NonTerminal("Expression");
@@ -397,309 +400,68 @@ namespace Proyecto1.Irony_Resources
             #region Grammar
 
                 // Inicio 
-                Begin.Rule                      = InsProgram + Declarations + MainBlock
-                                                | InsProgram + MainBlock
+                Begin.Rule                      = InsProgram + Declarations //+ MainBlock
+                                                //| InsProgram + MainBlock
                                                 | Eof
                                                 ;
 
-                // Errores Inicio 
+                // Produccion De Error
                 Begin.ErrorRule                 = SyntaxError + SymbolSemiColon
                                                 | SyntaxError + ReservedEnd
                                                 ;
 
-                // Main Block 
-                MainBlock.Rule                  = ReservedBegin + Instruccions + ReservedEnd + SymbolPoint
-                                                | ReservedBegin + ReservedEnd + SymbolPoint
-                                                ;
-
-                // Produccion De Error 
-                MainBlock.ErrorRule             = SyntaxError + SymbolSemiColon
-                                                | SyntaxError + ReservedEnd
-                                                ;
-
                 // Instruccion Program 
-                InsProgram.Rule                 = ReservedProgram + SimpleIdentifier + SymbolSemiColon  
-                                                ;
-
-                // Lista De Declaraciones
-                Declarations.Rule               = Declarations + Declaration 
-                                                | Declaration
-                                                ;
-
-                // Declaracion Individual
-                Declaration.Rule                = VariablesDeclaration
-                                                | ConstantsDeclaration
-                                                | Functions  
-                                                | ArraysObjects
-                                                ;
-
-                // Producción De Errores 
-                Declaration.ErrorRule          = SyntaxError + SymbolSemiColon
-                                               | SyntaxError + ReservedEnd
-                                               ;
-
-                // Array Objects 
-                ArraysObjects.Rule              = ReservedType + SimpleIdentifier + OperatorEqual + TypeOfTypes
-                                                ;
-
-                // Choose Type 
-                TypeOfTypes.Rule                = ObjectType + VariablesDeclaration + ReservedEnd + SymbolSemiColon
-                                                | ArrayType + SymbolLeftBracket + Expression + SymbolDoublePoint + Expression + SymbolRightBracket + ReservedOf + Types + SymbolSemiColon
-                                                ;
-
-                // Declaracion De Variables
-                VariablesDeclaration.Rule       = ReservedVar + VariablesDeclarationBlock
-                                                ;
-            
-                // Bloque Declaraciones 
-                VariablesDeclarationBlock.Rule  = VariablesDeclarationBlock + VariablesDeclarationList
-                                                | VariablesDeclarationList
-                                                ;
-
-                // Lista De Declaraciones Sintaxis
-                VariablesDeclarationList.Rule   = DeclarationList + SymbolColon + Types + VariableAsignationDec
-                                                ;
-
-                // Lista De Delcaraciones 
-                DeclarationList.Rule            = DeclarationList + SymbolComma + SimpleIdentifier  
-                                                | SimpleIdentifier
-                                                ;
-
-                // Tipos De Datos 
-                Types.Rule                      = StringType
-                                                | IntegerType
-                                                | RealType
-                                                | BooleanType
-                                                | SimpleIdentifier
-                                                ;
-
-                // Valores Boolean 
-                SimpleBoolean.Rule              = ReservedTrue
-                                                | ReservedFalse
-                                                ;
-
-                // Asignacion De Variables En Declaracion
-                VariableAsignationDec.Rule      = OperatorEqual + VariablesValues + SymbolSemiColon
-                                                | SymbolSemiColon
-                                                ;
-
-                // Valores Para Las Variables 
-                VariablesValues.Rule            = SimpleString
-                                                | SimpleInteger
-                                                | SimpleReal
-                                                | SimpleBoolean
-                                                | SimpleIdentifier
-                                                | SimpleIdentifier + SymbolPoint + SimpleIdentifier
-                                                | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis
-                                                | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis
-                                                ;
-
-                // Params List 
-                ParamsValueList.Rule            = ParamsValueList + SymbolComma + Expression
-                                                | Expression
-                                                ;
-
-                // Constantes 
-                ConstantsDeclaration.Rule       = ReservedConst + ConstantsDeclarationBlock
-                                                ;
-
-                // Bloque Constantes 
-                ConstantsDeclarationBlock.Rule  = ConstantsDeclarationBlock + Constants
-                                                | Constants
-                                                ;
-
-                // Declaracion De Una Constante 
-                Constants.Rule                  = SimpleIdentifier + OperatorEqual + ConstantsValues + SymbolSemiColon
-                                                ;
-
-                // Valores De Las Constantes 
-                ConstantsValues.Rule            = SimpleString
-                                                | SimpleInteger
-                                                | SimpleReal
-                                                | SimpleBoolean
-                                                ;
-
-                // Instrucciones 
-                Instruccions.Rule               = Instruccions + Instruccion
-                                                | Instruccion
-                                                ;
-
-                // Instruccion 
-                Instruccion.Rule                = VariablesAsignation
-                                                | InsIf
-                                                | InsCase
-                                                | InsWhile
-                                                | InsFor
-                                                | InsRepeat
-                                                | InsWrite
-                                                | InsGraficarTS
-                                                ;
-
-                // Producción De Error 
-                Instruccion.ErrorRule           = SyntaxError + SymbolSemiColon
-                                                | SyntaxError + ReservedEnd
-                                                ;
-
-                // Asignacion De Variables 
-                VariablesAsignation.Rule        = SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
-                                                | SimpleIdentifier + SymbolPoint + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
-                                                | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
-                                                | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
-                                                ;
-
-                // If Else 
-                InsIf.Rule                      = ReservedIf + Expression + ReservedThen + IfBlock + InsElse
-                                                ;
-
-                // Bloque if 
-                IfBlock.Rule                    = ReservedBegin + InstruccionsIfCasLo + ReservedEnd
-                                                | ReservedBegin + ReservedEnd
+                InsProgram.Rule                 = ReservedProgram + SimpleIdentifier + SymbolSemiColon
                                                 ;
 
                 // Produccion De Error
-                IfBlock.ErrorRule               = SyntaxError + SymbolSemiColon
+                InsProgram.ErrorRule            = SyntaxError + SymbolSemiColon
                                                 | SyntaxError + ReservedEnd
+                                                ;    
+
+            // Main Block 
+            /*MainBlock.Rule = ReservedBegin + Instruccions + ReservedEnd + SymbolPoint
+                                            | ReservedBegin + ReservedEnd + SymbolPoint
+                                            ;*/
+
+
+            // Lista De Declaraciones
+            Declarations.Rule =             Declarations + Declaration
+                                            | Declaration
+                                            ;
+
+            // Declaracion Individual
+            Declaration.Rule =              VariablesDeclaration
+                                            ;
+            // Declaracion De Variables
+            VariablesDeclaration.Rule = ReservedVar + VariablesDeclarationBlock
+                                            ;
+            // Bloque Declaraciones 
+            VariablesDeclarationBlock.Rule = VariablesDeclarationBlock + VariablesDeclarationList
+                                            | VariablesDeclarationList
+                                            ;
+            // Lista De Declaraciones Sintaxis
+            VariablesDeclarationList.Rule = DeclarationList + SymbolColon + Types + VariableAsignationDec
+                                            ;
+            // Lista De Delcaraciones 
+            DeclarationList.Rule = DeclarationList + SymbolComma + SimpleIdentifier
+                                            | SimpleIdentifier
+                                            ;
+            // Tipos De Datos 
+            Types.Rule = StringType
+                                                | IntegerType //tu madre osea me retorna integer
+                                                | RealType //real
+                                                | BooleanType // boolean
+                                                | SimpleIdentifier //ID
                                                 ;
 
-                // Else 
-                InsElse.Rule                    = ReservedElse + IfBlock + SymbolSemiColon
-                                                | ReservedElse + InsIf
-                                                | SymbolSemiColon
-                                                ;
+            // Asignacion De Variables En Declaracion
+            VariableAsignationDec.Rule = OperatorEqual + Expression + SymbolSemiColon
+                                            | SymbolSemiColon
+                                            ;
 
-                // Instrucciones If
-                InstruccionsIfCasLo.Rule         = InstruccionsIfCasLo + InstruccionIfCasLo
-                                                | InstruccionIfCasLo
-                                                ;
-
-                // Instruccion If 
-                InstruccionIfCasLo.Rule         = VariablesAsignation
-                                                | InsIf
-                                                | InsCase
-                                                | InsWhile
-                                                | InsFor
-                                                | InsRepeat
-                                                | TransferSentences
-                                                | ExitSentence
-                                                | InsWrite
-                                                | InsGraficarTS
-                                                ;
-
-                // Produccion De Error 
-                InstruccionIfCasLo.ErrorRule    = SyntaxError + SymbolSemiColon 
-                                                | SyntaxError + ReservedEnd
-                                                ;
-
-                // Case 
-                InsCase.Rule                    = ReservedCase + SymbolLeftParenthesis + Expression + SymbolRightParenthesis + ReservedOf + Cases
-                                                ;
-
-                // Casos 
-                Cases.Rule                      = Expression + SymbolColon + CaseBlock + CaseElse
-                                                ;
-
-                // Bloque Case 
-                CaseBlock.Rule                  = ReservedBegin + InstruccionsIfCasLo + ReservedEnd + SymbolSemiColon
-                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
-                                                ;
-
-                // Case Else 
-                CaseElse.Rule                   = ReservedElse + ReservedBegin + InstruccionsIfCasLo + ReservedEnd + SymbolSemiColon + ReservedEnd + SymbolSemiColon
-                                                | ReservedEnd + SymbolSemiColon
-                                                | Cases
-                                                ;
-
-                // While Do 
-                InsWhile.Rule                   = ReservedWhile + Expression + ReservedDo + WhileBlock
-                                                ;
-
-                // While Block
-                WhileBlock.Rule                 = ReservedBegin + InstruccionIfCasLo + ReservedEnd + SymbolSemiColon
-                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
-                                                ;
-
-                // For 
-                InsFor.Rule                     = ReservedFor + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + ReservedTo + Expression + ReservedDo + ForBlock
-                                                ;
-
-                // Bloque For 
-                ForBlock.Rule                   = ReservedBegin + InstruccionIfCasLo + ReservedEnd + SymbolSemiColon
-                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
-                                                ;
-
-                // Until Repeat
-                InsRepeat.Rule                  = ReservedRepeat + RepeatBlock + ReservedUntil + Expression + SymbolSemiColon
-                                                ;
-
-                // Bloque Repeat 
-                RepeatBlock.Rule                = ReservedBegin + InstruccionIfCasLo + ReservedEnd + SymbolSemiColon
-                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
-                                                ;
-
-                // Sentecia De Transeferencias
-                TransferSentences.Rule          = ReservedBreak + SymbolSemiColon
-                                                | ReservedContinue + SymbolSemiColon
-                                                ;
-
-                // Funciones Y Procedimientos
-                Functions.Rule                  = ReservedFunction + SimpleIdentifier + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
-                                                | ReservedProcedure + SimpleIdentifier + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
-                                                | ReservedFunction + SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations  + FunctionsBlock
-                                                | ReservedProcedure + SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon + FunctionsDeclarations  + FunctionsBlock
-                                                | ReservedFunction + SimpleIdentifier + SymbolLeftParenthesis + ParamListDeclaration  + SymbolRightParenthesis + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations  + FunctionsBlock
-                                                | ReservedProcedure + SimpleIdentifier + SymbolLeftParenthesis + ParamListDeclaration + SymbolRightParenthesis + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
-                                                ;
-                // Funciones Declarations
-                FunctionsDeclarations.Rule      = Declarations
-                                                | Empty
-                                                ;
-
-                // Bloque Funciones 
-                FunctionsBlock.Rule             = ReservedBegin + InstruccionsIfCasLo + ReservedEnd + SymbolSemiColon
-                                                | ReservedBegin + ReservedEnd + SymbolSemiColon
-                                                ;
-
-                // Lista De Parametros
-                ParamListDeclaration.Rule       = ParamListDeclaration + ParamDecList
-                                                | ParamDecList
-                                                ;
-
-                // Lista De Declaraciones Sintaxis
-                ParamDecList.Rule               = ParamsDec + SymbolColon + Types + ParamEnd
-                                                ;
-
-                // Fin Parametro             
-                ParamEnd.Rule                   = SymbolSemiColon 
-                                                | Empty  
-                                                ;
-
-                // Return Exit
-                ExitSentence.Rule               = ReservedExit + SymbolLeftParenthesis + Expression + SymbolRightParenthesis + SymbolSemiColon
-                                                | ReservedExit + SymbolSemiColon
-                                                ;
-
-                // Lista De Delcaraciones 
-                ParamsDec.Rule                  = ParamsDec + SymbolComma + SimpleIdentifier
-                                                | ReservedVar + SimpleIdentifier
-                                                | SimpleIdentifier
-                                                ;
-
-                // Imprimir En Consola
-                InsWrite.Rule                   = ReservedWrite + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
-                                                | ReservedWrite + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
-                                                | ReservedWrite + SymbolSemiColon
-                                                | ReservedWriteLine + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
-                                                | ReservedWriteLine + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
-                                                | ReservedWriteLine + SymbolSemiColon
-                                                ;
-
-                // Graficar Ts 
-                InsGraficarTS.Rule              = ReservedGraficar + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
-                                                | ReservedGraficar + SymbolSemiColon
-                                                ;
-            
-                // Expresiones 
-                Expression.Rule                 = SymbolLeftParenthesis + Expression + SymbolRightParenthesis 
+            // Expresiones 
+            Expression.Rule                 = SymbolLeftParenthesis + Expression + SymbolRightParenthesis 
                                                 | Expression + OperatorPlus + Expression
                                                 | Expression + OperatorMinus + Expression
                                                 | Expression + OperatorMult + Expression
@@ -717,14 +479,28 @@ namespace Proyecto1.Irony_Resources
                                                 | Expression + OperatorOr + Expression
                                                 | VariablesValues
                                                 ;
+            VariablesValues.Rule = SimpleString
+                                            | SimpleInteger
+                                            | SimpleReal
+                                            | ReservedTrue
+                                            | ReservedFalse// no creo porque es o true o false
+                                            | SimpleIdentifier
+                                            /*| SimpleIdentifier + SymbolPoint + SimpleIdentifier
+                                            | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis
+                                            | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis
+                                            | SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket
+                                            */;
 
-                // Instruccion Comentarios 
-                //Comments.Rule               = OneLineComment
-                //                            | MultiLineComment1
-                //                            | MultiLineComment2
-                //                            ;
 
-            #endregion   
+
+
+            // Instruccion Comentarios 
+            //Comments.Rule               = OneLineComment
+            //                            | MultiLineComment1
+            //                            | MultiLineComment2
+            //                            ;
+
+            #endregion
 
         }
 

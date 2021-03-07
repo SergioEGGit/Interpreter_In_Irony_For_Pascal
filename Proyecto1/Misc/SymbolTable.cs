@@ -1,7 +1,7 @@
-﻿// ------------------------------------------ Librerias E Imports --------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
+using System;
 
-
-// ------------------------------------------------ NameSpace ------------------------------------------------
+// ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.Misc
 {
     
@@ -11,22 +11,32 @@ namespace Proyecto1.Misc
 
         // Atributos 
 
-        // Contador De Simbolos 
-        public int SymbolCounter;
+        // Identificador De Simbolo
+        public String Identifier;
 
-        // Tipo 
+        // Tipo De Simbolo
+        public String Type;
+
+        // Valor Asociado Al Simbolo
+        public object Value;
+        
+        // Tipo De Declaracion
+        public String DecType;
 
         // Ambito 
-
-        // Valor 
+        public String Env;
 
         // Constructor 
-        public SymbolTable(int SymbolCounter) {
+         public SymbolTable(String Identifier, String Type, object Value, String DecType, String Env) {
 
-            // Inicializar Valores 
-            this.SymbolCounter = SymbolCounter;
-        
-        }
+            // Incializar Valores
+            this.Identifier = Identifier;
+            this.Type = Type;
+            this.Value = Value;
+            this.DecType = DecType;
+            this.Env = Env;
+         
+         }
 
     }
 

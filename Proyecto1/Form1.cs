@@ -1,9 +1,9 @@
-﻿// ------------------------------------------ Librerias E Imports -----------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
 using System;
 using System.Windows.Forms;
 using Proyecto1.Misc;
 
-// ------------------------------------------------ NameSpace ---------------------------------------------------
+// ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1
 {
     
@@ -11,7 +11,7 @@ namespace Proyecto1
     public partial class Form1 : Form
     {
         // Instancia Clase Irony_Analyze
-        readonly Irony_Resources.Irony_Parser SimpleParser = new Irony_Resources.Irony_Parser();
+        readonly Irony_Resources.Irony_Parser ParserTranslate = new Irony_Resources.Irony_Parser();
 
         // Constructor Inicial 
         public Form1()
@@ -30,7 +30,7 @@ namespace Proyecto1
             String EntranceString = TextEntrance.Text;
 
             // Analizar Texto 
-            SimpleParser.AnalyzeTranslate(EntranceString);
+            ParserTranslate.AnalyzeTranslate(EntranceString);
 
         }
 

@@ -1,8 +1,8 @@
-﻿// ------------------------------------------ Librerias E Imports -----------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
 using System;
 using Proyecto1.Misc;
 
-// ------------------------------------------------ NameSpace ---------------------------------------------------
+// ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.TranslatorAndInterpreter
 {
 
@@ -11,6 +11,8 @@ namespace Proyecto1.TranslatorAndInterpreter
     {
 
         // Atributos
+
+        // Identificador
         public String IdentifierInsProgram;
 
         // Constructor 
@@ -22,16 +24,19 @@ namespace Proyecto1.TranslatorAndInterpreter
         }
         
         // Metodo Ejecutar 
-        public override object Execute()
+        public override object Execute(EnviromentTable Env)
         {
 
-            // No Implementacion
-            throw new System.NotImplementedException();
+            // Agregar Identificador A Tabla Simbolos
+            Env.AddVariable(this.IdentifierInsProgram, "program", null, "program", Env.EnviromentName);
+
+            // Retorno 
+            return null;
         
         }
 
         // Metodo Traducir 
-        public override object Translate()
+        public override object Translate(EnviromentTable Env)
         {
 
             // Traducción 

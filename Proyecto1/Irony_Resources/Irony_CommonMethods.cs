@@ -1,8 +1,8 @@
-﻿// ------------------------------------------ Librerias E Imports ----------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
 using System;
 using Irony.Parsing;
 
-// ------------------------------------------------ NameSpace --------------------------------------------------
+// ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.Irony_Resources
 {
 
@@ -30,8 +30,7 @@ namespace Proyecto1.Irony_Resources
                 String ActualChildNode = "Node_" + GraphicCounter.ToString();
                 
                 // Crear Nuevo Nodo Graphviz Con Datos Del Nodo Hijo 
-                GraphicString += ActualChildNode +
-                                 "[label = \"" + CurrentTreeNode.ToString() +  "\"];\n";
+                GraphicString += ActualChildNode + "[label = \"" + CurrentTreeNode.ToString() +  "\"];\n";
 
                 // Crear Enlance Con Nodo Padre 
                 GraphicString += ParnetNode + "->" + ActualChildNode + "; \n";
