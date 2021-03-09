@@ -1,8 +1,8 @@
-﻿// ------------------------------------------ Librerias E Imports ----------------------------------------------
+﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
 using System;
 using System.Collections.Generic;
 
-// ------------------------------------------------ NameSpace --------------------------------------------------
+// ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.Misc
 {
    
@@ -20,6 +20,15 @@ namespace Proyecto1.Misc
 
         // String Que Contiene La Traduccion 
         public static String TranslateString = "";
+
+        // Contador De Errores 
+        public static int AuxiliaryCounter;
+
+        // Columna Locacion Del Token 
+        public static int TokenColumn;
+
+        // Linea Locacion Token
+        public static int TokenLine;
 
     }
 

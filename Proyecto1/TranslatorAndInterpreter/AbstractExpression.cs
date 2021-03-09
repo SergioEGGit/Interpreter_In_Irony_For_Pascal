@@ -12,10 +12,10 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Creación De Metodos Abstractos 
 
         // Método Traducir 
-        public abstract Retorno Translate(EnviromentTable Env); 
+        public abstract ObjectReturn Translate(EnviromentTable Env); 
 
         // Método Ejecutar 
-        public abstract Retorno Execute(EnviromentTable Env);       
+        public abstract ObjectReturn Execute(EnviromentTable Env);       
 
     }
 }

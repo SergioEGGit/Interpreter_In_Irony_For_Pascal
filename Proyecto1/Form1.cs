@@ -32,6 +32,12 @@ namespace Proyecto1
             // Analizar Texto 
             ParserTranslate.AnalyzeTranslate(EntranceString);
 
+            // Limpiar Consola
+            TextEntrance.Text = "";
+
+            // Agregar Traduccion
+            TextEntrance.Text = Variables.TranslateString;
+
         }
 
         private void ButtonExecute_Click(object sender, EventArgs e)

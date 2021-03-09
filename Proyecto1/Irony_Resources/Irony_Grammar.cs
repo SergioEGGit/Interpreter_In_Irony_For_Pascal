@@ -26,7 +26,7 @@ namespace Proyecto1.Irony_Resources
 
                 // Identificadores 
                 IdentifierTerminal SimpleIdentifier = new IdentifierTerminal("Identifier");
-            
+
                 // Cadena String 
                 StringLiteral SimpleString = new StringLiteral("SimpleString", "'");
 
@@ -51,13 +51,13 @@ namespace Proyecto1.Irony_Resources
                 BnfTerm IntegerType = ToTerm("integer");
 
                 BnfTerm RealType = ToTerm("real");
-          
+
                 BnfTerm BooleanType = ToTerm("boolean");
-             
+
                 BnfTerm VoidType = ToTerm("void");
 
                 BnfTerm ObjectType = ToTerm("object");
-          
+
                 BnfTerm ArrayType = ToTerm("array");
 
                 // Palabras Reservadas 
@@ -65,7 +65,7 @@ namespace Proyecto1.Irony_Resources
                 BnfTerm ReservedProgram = ToTerm("program");
 
                 BnfTerm ReservedEnd = ToTerm("end");
-            
+
                 BnfTerm ReservedType = ToTerm("type");
 
                 BnfTerm ReservedVar = ToTerm("var");
@@ -168,9 +168,9 @@ namespace Proyecto1.Irony_Resources
 
                 BnfTerm OperatorOr = ToTerm("or");
 
-                BnfTerm OperatorNot = ToTerm("not");                
+                BnfTerm OperatorNot = ToTerm("not");
 
-            #endregion            
+            #endregion
 
             // Región No Terminales 
             #region NonTerminals
@@ -328,44 +328,44 @@ namespace Proyecto1.Irony_Resources
                 // Diccionario De Palabras Reservadas 
                 string[] DictionaryReservedWords =  {
 
-                                                            "string",
-                                                            "integer",
-                                                            "real",
-                                                            "boolean",
-                                                            "object",
-                                                            "array",
-                                                            "program",
-                                                            "end",
-                                                            "type",
-                                                            "var",
-                                                            "begin",
-                                                            "of",
-                                                            "const",
-                                                            "true",
-                                                            "false",
-                                                            "if",
-                                                            "then",
-                                                            "else",
-                                                            "case",
-                                                            "while",
-                                                            "do",
-                                                            "to",
-                                                            "for",
-                                                            "repeat",
-                                                            "until",
-                                                            "break",
-                                                            "continue",
-                                                            "function",
-                                                            "procedure",
-                                                            "exit",
-                                                            "write",
-                                                            "writeline",
-                                                            "graficar_ts",
-                                                            "and",
-                                                            "or",
-                                                            "not"
+                                                                "string",
+                                                                "integer",
+                                                                "real",
+                                                                "boolean",
+                                                                "object",
+                                                                "array",
+                                                                "program",
+                                                                "end",
+                                                                "type",
+                                                                "var",
+                                                                "begin",
+                                                                "of",
+                                                                "const",
+                                                                "true",
+                                                                "false",
+                                                                "if",
+                                                                "then",
+                                                                "else",
+                                                                "case",
+                                                                "while",
+                                                                "do",
+                                                                "to",
+                                                                "for",
+                                                                "repeat",
+                                                                "until",
+                                                                "break",
+                                                                "continue",
+                                                                "function",
+                                                                "procedure",
+                                                                "exit",
+                                                                "write",
+                                                                "writeline",
+                                                                "graficar_ts",
+                                                                "and",
+                                                                "or",
+                                                                "not"
 
-                                                   };
+                                                       };
 
                 // Marcar Palabras Reservadas 
                 MarkReservedWords(DictionaryReservedWords);
@@ -400,98 +400,131 @@ namespace Proyecto1.Irony_Resources
             #region Grammar
 
                 // Inicio 
-                Begin.Rule                      = InsProgram + Declarations //+ MainBlock
-                                                //| InsProgram + MainBlock
-                                                | Eof
-                                                ;
+                Begin.Rule                          = InsProgram + Declarations //+ MainBlock
+                                                   //| InsProgram + MainBlock
+                                                    | Eof
+                                                    ;
 
                 // Produccion De Error
-                Begin.ErrorRule                 = SyntaxError + SymbolSemiColon
-                                                | SyntaxError + ReservedEnd
-                                                ;
+                Begin.ErrorRule                     = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
 
                 // Instruccion Program 
-                InsProgram.Rule                 = ReservedProgram + SimpleIdentifier + SymbolSemiColon
-                                                ;
+                InsProgram.Rule                     = ReservedProgram + SimpleIdentifier + SymbolSemiColon
+                                                    ;
 
                 // Produccion De Error
-                InsProgram.ErrorRule            = SyntaxError + SymbolSemiColon
-                                                | SyntaxError + ReservedEnd
-                                                ;    
+                InsProgram.ErrorRule                = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Lista De Declaraciones
+                Declarations.Rule                   = Declarations + Declaration
+                                                    | Declaration
+                                                    ;
+
+                // Declaracion Individual
+                Declaration.Rule                    = VariablesDeclaration
+                                                    ;
+
+                // Produccion De Errores 
+                Declaration.ErrorRule               = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Declaracion De Variables
+                VariablesDeclaration.Rule           = ReservedVar + VariablesDeclarationBlock
+                                                    ;
+
+                // Bloque Declaraciones 
+                VariablesDeclarationBlock.Rule      = VariablesDeclarationBlock + VariablesDeclarationList
+                                                    | VariablesDeclarationList
+                                                    ;
+
+                // Lista De Declaraciones Sintaxis
+                VariablesDeclarationList.Rule       = DeclarationList + SymbolColon + Types + VariableAsignationDec
+                                                    ;
+
+                // Produccion De Errores 
+                VariablesDeclarationList.ErrorRule  = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Lista De Delcaraciones 
+                DeclarationList.Rule                = DeclarationList + SymbolComma + SimpleIdentifier
+                                                    | SimpleIdentifier
+                                                    ;
+
+                // Produccion De Errores 
+                DeclarationList.ErrorRule           = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Tipos De Datos 
+                Types.Rule                          = StringType
+                                                    | IntegerType
+                                                    | RealType
+                                                    | BooleanType
+                                                    | SimpleIdentifier
+                                                    ;
+
+                // Produccion De Errores 
+                Types.ErrorRule                     = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Asignacion De Variables En Declaracion
+                VariableAsignationDec.Rule          = OperatorEqual + Expression + SymbolSemiColon
+                                                    | SymbolSemiColon
+                                                    ;
+
+                // Produccion De Errores 
+                VariableAsignationDec.ErrorRule     = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Expresiones 
+                Expression.Rule                     = SymbolLeftParenthesis + Expression + SymbolRightParenthesis
+                                                    | Expression + OperatorPlus + Expression
+                                                    | Expression + OperatorMinus + Expression
+                                                    | Expression + OperatorMult + Expression
+                                                    | Expression + OperatorDiv + Expression
+                                                    | Expression + OperatorMod + Expression
+                                                    | OperatorMinus + Expression
+                                                    | OperatorNot + Expression
+                                                    | Expression + OperatorLessSame + Expression
+                                                    | Expression + OperatorGreaterSame + Expression
+                                                    | Expression + OperatorLess + Expression
+                                                    | Expression + OperatorGreater + Expression
+                                                    | Expression + OperatorEqual + Expression
+                                                    | Expression + OperatorDiffer + Expression
+                                                    | Expression + OperatorAnd + Expression
+                                                    | Expression + OperatorOr + Expression
+                                                    | VariablesValues
+                                                    ;
+
+                // Produccion De Error 
+                Expression.ErrorRule                = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Valores Primitivos y Otros         
+                VariablesValues.Rule                = SimpleString
+                                                    | SimpleInteger
+                                                    | SimpleReal
+                                                    | SimpleBoolean
+                                                    | SimpleIdentifier
+                                                    /*| SimpleIdentifier + SymbolPoint + SimpleIdentifier
+                                                    | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis
+                                                    | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis
+                                                    | SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket
+                                                    */;
 
             // Main Block 
             /*MainBlock.Rule = ReservedBegin + Instruccions + ReservedEnd + SymbolPoint
                                             | ReservedBegin + ReservedEnd + SymbolPoint
                                             ;*/
-
-
-            // Lista De Declaraciones
-            Declarations.Rule =             Declarations + Declaration
-                                            | Declaration
-                                            ;
-
-            // Declaracion Individual
-            Declaration.Rule =              VariablesDeclaration
-                                            ;
-            // Declaracion De Variables
-            VariablesDeclaration.Rule = ReservedVar + VariablesDeclarationBlock
-                                            ;
-            // Bloque Declaraciones 
-            VariablesDeclarationBlock.Rule = VariablesDeclarationBlock + VariablesDeclarationList
-                                            | VariablesDeclarationList
-                                            ;
-            // Lista De Declaraciones Sintaxis
-            VariablesDeclarationList.Rule = DeclarationList + SymbolColon + Types + VariableAsignationDec
-                                            ;
-            // Lista De Delcaraciones 
-            DeclarationList.Rule = DeclarationList + SymbolComma + SimpleIdentifier
-                                            | SimpleIdentifier
-                                            ;
-            // Tipos De Datos 
-            Types.Rule = StringType
-                                                | IntegerType //tu madre osea me retorna integer
-                                                | RealType //real
-                                                | BooleanType // boolean
-                                                | SimpleIdentifier //ID
-                                                ;
-
-            // Asignacion De Variables En Declaracion
-            VariableAsignationDec.Rule = OperatorEqual + Expression + SymbolSemiColon
-                                            | SymbolSemiColon
-                                            ;
-
-            // Expresiones 
-            Expression.Rule                 = SymbolLeftParenthesis + Expression + SymbolRightParenthesis 
-                                                | Expression + OperatorPlus + Expression
-                                                | Expression + OperatorMinus + Expression
-                                                | Expression + OperatorMult + Expression
-                                                | Expression + OperatorDiv + Expression
-                                                | Expression + OperatorMod + Expression 
-                                                | OperatorMinus + Expression
-                                                | OperatorNot + Expression
-                                                | Expression + OperatorLessSame + Expression
-                                                | Expression + OperatorGreaterSame + Expression
-                                                | Expression + OperatorLess + Expression
-                                                | Expression + OperatorGreater + Expression
-                                                | Expression + OperatorEqual + Expression
-                                                | Expression + OperatorDiffer + Expression
-                                                | Expression + OperatorAnd + Expression
-                                                | Expression + OperatorOr + Expression
-                                                | VariablesValues
-                                                ;
-            VariablesValues.Rule = SimpleString
-                                            | SimpleInteger
-                                            | SimpleReal
-                                            | ReservedTrue
-                                            | ReservedFalse// no creo porque es o true o false
-                                            | SimpleIdentifier
-                                            /*| SimpleIdentifier + SymbolPoint + SimpleIdentifier
-                                            | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis
-                                            | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis
-                                            | SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket
-                                            */;
-
-
 
 
             // Instruccion Comentarios 

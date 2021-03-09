@@ -62,131 +62,366 @@ namespace Proyecto1.Irony_Resources
         {
 
             // Agregar Clase A La Lista 
-            Variables.TranslateList.AddLast(new InsProgram(SplitMethod(ActualNode.ChildNodes[1].ToString())));
+            Variables.TranslateList.AddLast(new InsProgram(SplitMethod(ActualNode.ChildNodes[1].ToString(), "Default")));
         
         }
 
         // Lista De Declaraciones 
-        public void Declarations(ParseTreeNode Nodo)
+        public void Declarations(ParseTreeNode ActualNode)
         {
-            //aqui miramos si hay dos o uno
-            if (Nodo.ChildNodes.Count == 2)
-            {//recursividad
-                Declarations(Nodo.ChildNodes[0]);
-                Declaration(Nodo.ChildNodes[1]);
-            }
-            else if (Nodo.ChildNodes.Count == 1)
+
+            // Verificar Camino A Seguir
+            if (ActualNode.ChildNodes.Count == 2)
             {
-                Declaration(Nodo.ChildNodes[0]);
+
+                // Lista De Delcaraciones
+                Declarations(ActualNode.ChildNodes[0]);
+
+                // Declaracion
+                Declaration(ActualNode.ChildNodes[1]);
+            
+            }
+            else if (ActualNode.ChildNodes.Count == 1)
+            {
+
+                // Declaracion
+                Declaration(ActualNode.ChildNodes[0]);
+
+            }
+
+        }
+
+        // Delcaracion  
+        public void Declaration(ParseTreeNode ActualNode)
+        {
+
+            // Verificar Nombre Del ActualNode 
+            if(ActualNode.ChildNodes[0].ToString().Equals("VariablesDeclaration"))
+            {
+
+                // Delcaracions De Variables
+                VariablesDeclaration(ActualNode.ChildNodes[0]);
+  
+            }
+
+        }
+
+        // Declaracion De Variables 
+        public void VariablesDeclaration(ParseTreeNode ActualNode)
+        {
+
+            // Agregar Clase Declaracion De Variables 
+            Variables.TranslateList.AddLast(new VariablesDeclaration());
+            
+            // Bloque Declaracion
+            VariablesDeclarationBlock(ActualNode.ChildNodes[1]);
+
+        }
+
+        // Bloque Declaracion
+        public void VariablesDeclarationBlock(ParseTreeNode ActualNode)
+        {
+            
+            // Verificar Camino A Seguir
+            if (ActualNode.ChildNodes.Count == 2)
+            {
+
+                // Bloque Declaracion
+                VariablesDeclarationBlock(ActualNode.ChildNodes[0]);
+                
+                // LIsta De Declaraciones
+                VariablesDeclarationList(ActualNode.ChildNodes[1]);
+
+            }
+            else if (ActualNode.ChildNodes.Count == 1)
+            {
+
+                // Lista De Declaraciones 
+                VariablesDeclarationList(ActualNode.ChildNodes[0]);
+
+            }
+
+        }
+
+        // Lista De Declaraciones
+        public void VariablesDeclarationList(ParseTreeNode ActualNode)
+        {
+            
+            // Obtener Identificadores 
+            String Identifiers = DeclarationList(ActualNode.ChildNodes[0]);
+         
+            // Obtener Tipo
+            String Type = SplitMethod(ActualNode.ChildNodes[2].ChildNodes[0].ToString(), "Default");
+
+            // Expression
+            AbstractExpression Expression = VariableAsignationDec(ActualNode.ChildNodes[3]);
+
+            // Verificar Token 
+            if (ActualNode.ChildNodes[0].ChildNodes.Count == 3)
+            {
+
+                // Columna Token 
+                Variables.TokenColumn = ActualNode.ChildNodes[0].ChildNodes[2].Token.Location.Column;
+
+                // Fila Token 
+                Variables.TokenLine = ActualNode.ChildNodes[0].ChildNodes[2].Token.Location.Column;
+
+            } 
+            else if (ActualNode.ChildNodes[0].ChildNodes.Count == 1) 
+            {
+
+                // Columna Token 
+                Variables.TokenColumn = ActualNode.ChildNodes[0].ChildNodes[0].Token.Location.Column;
+
+                // Fila Token 
+                Variables.TokenLine = ActualNode.ChildNodes[0].ChildNodes[0].Token.Location.Column;
+
+            } 
+
+            // Agregar A Lista De Clases 
+            Variables.TranslateList.AddLast(new PrimitiveDeclaration(Identifiers, Type, Expression, "Var", Variables.TokenColumn, Variables.TokenLine));
+
+        }
+
+        // Lista De Identificadores 
+        public String DeclarationList(ParseTreeNode ActualNode)
+        {
+            
+            // Verificar Camino A Seguir
+            if (ActualNode.ChildNodes.Count == 3)
+            {
+
+                // Obtener Identificadores 
+                return DeclarationList(ActualNode.ChildNodes[0]) + "," + SplitMethod(ActualNode.ChildNodes[2].ToString(), "Default");
+            
+            }
+            else if(ActualNode.ChildNodes.Count == 1)
+            {
+                
+                // Identificador 
+                return SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default");
+            
             }
             else
             {
-                //imagino aqui con tu produccion de error lo miras
-                //los errores los llevaria hasta deSplitMethodues pero ya miras vos
-            }
-        }
 
-        public void Declaration(ParseTreeNode Nodo)
-        {
-            if (Nodo.ChildNodes[0].ToString() == "VariablesDeclaration")
-            {
-                VariablesDeclaration(Nodo.ChildNodes[0]);
-            }
-            else
-            {
-
-            }
-        }
-
-        public void VariablesDeclaration(ParseTreeNode Nodo)
-        {
-            VariablesDeclarationBlock(Nodo.ChildNodes[1]);
-        }
-
-        public void VariablesDeclarationBlock(ParseTreeNode Nodo)
-        {
-            if (Nodo.ChildNodes.Count == 2)
-            {
-                VariablesDeclarationBlock(Nodo.ChildNodes[0]);
-                VariablesDeclarationList(Nodo.ChildNodes[1]);
-            }
-            else if (Nodo.ChildNodes.Count == 1)
-            {
-                VariablesDeclarationList(Nodo.ChildNodes[0]);
-            }
-            else
-            {
-            }
-        }
-
-        public void VariablesDeclarationList(ParseTreeNode Nodo)
-        {
-            String Ids = DeclarationList(Nodo.ChildNodes[0]);
-            String Tipo = SplitMethod(Nodo.ChildNodes[2].ToString());
-            AbstractExpression Expresion = VariableAsignationDec(Nodo.ChildNodes[3]);
-            Variables.TranslateList.AddLast(new PrimitiveDeclaration(Ids, Tipo, Expresion, "var"));
-        }
-
-        public String DeclarationList(ParseTreeNode Nodo)
-        {
-            if (Nodo.ChildNodes.Count == 3)
-            {
-                return DeclarationList(Nodo.ChildNodes[0]) + "," + SplitMethod(Nodo.ChildNodes[0].ToString());
-            }
-            else if (Nodo.ChildNodes.Count == 1)
-            {
-                return SplitMethod(Nodo.ChildNodes[0].ToString());
-            }
-            else
-            {
+                // Vacio
                 return "";
+            
             }
             
         }
 
-        public AbstractExpression VariableAsignationDec(ParseTreeNode Nodo)
+        // Asignacion En Declaracion
+        public AbstractExpression VariableAsignationDec(ParseTreeNode ActualNode)
         {
-            if (Nodo.ChildNodes.Count == 3)
+            
+            // Verificar Camino A Seguir
+            if (ActualNode.ChildNodes.Count == 3)
             {
-                return Expression(Nodo.ChildNodes[1]);
+                
+                // Retornar Expression
+                return Expression(ActualNode.ChildNodes[1]);
+                
             }
-            else if (Nodo.ChildNodes.Count == 1)
+            else if (ActualNode.ChildNodes.Count == 1)
             {
+               
+                // Sin Asignacion
                 return null;
+
             }
             else
             {
+
+                // Error
                 return null;
+            
             }
+        
         }
 
-        public AbstractExpression Expression(ParseTreeNode Nodo)
+        // Expresion
+        public AbstractExpression Expression(ParseTreeNode ActualNode)
         {
-            if (Nodo.ChildNodes.Count == 1)
-            {
-                return VariablesValues(Nodo.ChildNodes[0]);
-            }
-            else if (Nodo.ChildNodes.Count == 2)
+            
+            // Verificar Camino A Seguir
+            if (ActualNode.ChildNodes.Count == 1)
             {
 
+                // Obtener Valor Primitivo 
+                return VariablesValues(ActualNode.ChildNodes[0]);
+
             }
-            else
+            else if (ActualNode.ChildNodes.Count == 2)
             {
-                String Operador = SplitMethod(Nodo.ChildNodes[1].ToString());
-                switch (Operador)
+
+
+                // Obtener Operador 
+                String Operator = SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default");
+
+                // Objeto Auxiliar 
+                AbstractExpression AuxiliaryReturn = null;
+
+                // Switch 
+                switch(Operator)
                 {
-                    case "+":
-                        return new SUM(Expression(Nodo.ChildNodes[0]), Expression(Nodo.ChildNodes[2]));
+                
+                    case "-":
+
+                        AuxiliaryReturn = new Arithmetic(null, Expression(ActualNode.ChildNodes[1]), "Minus", ActualNode.ChildNodes[0].Token.Location.Line, ActualNode.ChildNodes[0].Token.Location.Column);
+
+                    break;
+
+                    case "not":
+
+                        AuxiliaryReturn = new Logical(null, Expression(ActualNode.ChildNodes[1]), "Not", ActualNode.ChildNodes[0].Token.Location.Line, ActualNode.ChildNodes[0].Token.Location.Column);
+
                         break;
+
+
                 }
 
-            }              
+                // Retornar 
+                return AuxiliaryReturn;
+
+            }
+            else if (ActualNode.ChildNodes.Count == 3 && ActualNode.ChildNodes[1].ToString().Equals("Expression"))
+            {
+
+                // Objeto Auxiliar 
+                AbstractExpression AuxiliaryReturn;
+
+                // Agregar Clase 
+                AuxiliaryReturn = new Parenthesis(Expression(ActualNode.ChildNodes[1]));
+
+                // Retornar 
+                return AuxiliaryReturn;
+
+            }
+            else
+            {
+
+                // Obtener Operador 
+                String Operator = SplitMethod(ActualNode.ChildNodes[1].ToString(), "Default");
+
+                // Objeto Auxiliar 
+                AbstractExpression AuxiliaryReturn = null;
+
+                // Switch 
+                switch(Operator)
+                {
+                
+                    case "+":
+                        
+                        // Retornar 
+                        AuxiliaryReturn = new Arithmetic(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Sum", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "-":
+
+                        // Retornar
+                        AuxiliaryReturn = new Arithmetic(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Substraction", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "*":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Arithmetic(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Multiplication", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "/":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Arithmetic(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Division", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "%":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Arithmetic(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Mod", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "<=":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Relational(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "LessSame", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case ">=":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Relational(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "GreaterSame", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "<":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Relational(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Less", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case ">":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Relational(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Greater", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "=":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Relational(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Equal", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "<>":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Relational(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Differ", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "and":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Logical(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "And", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+
+                    case "or":
+
+                        // Retornar 
+                        AuxiliaryReturn = new Logical(Expression(ActualNode.ChildNodes[0]), Expression(ActualNode.ChildNodes[2]), "Or", ActualNode.ChildNodes[1].Token.Location.Line, ActualNode.ChildNodes[1].Token.Location.Column);
+
+                        break;
+                        
+                }
+
+                // Retorno 
+                return AuxiliaryReturn;
+
+            }
+            
+            // Null
             return null;
+ 
         }
 
-        public AbstractExpression VariablesValues(ParseTreeNode Nodo)
+        // Valores Primitivos
+        public AbstractExpression VariablesValues(ParseTreeNode ActualNode)
         {
-            return new PrimitiveValue(SplitMethod(Nodo.ChildNodes[0].ToString()));
+            
+            // Retornar Valor Expression
+            return new PrimitiveValue(SplitMethod(ActualNode.ChildNodes[0].ToString(), "Value"));
+
         }
 
         // Misc 
@@ -216,7 +451,7 @@ namespace Proyecto1.Irony_Resources
             // Instancia Arbol De Analisis Sintactico
             ParseTree AnalyzeTree = AnalyzeParser.Parse(AnalyzeString);
 
-            // Instancia Nodo Arbol De Analisis Sintactico
+            // Instancia ActualNode Arbol De Analisis Sintactico
             ParseTreeNode RootTreeNode = AnalyzeTree.Root;
 
             // Inicializar Lista De Errores 
@@ -227,7 +462,7 @@ namespace Proyecto1.Irony_Resources
             {
 
                 // Contador Auxiliar 
-                int AuxiliaryCounter = 1;
+                Variables.AuxiliaryCounter = 1;
 
                 // Recorrer Mensajes De Error 
                 foreach (var ItemError in AnalyzeTree.ParserMessages)
@@ -244,19 +479,19 @@ namespace Proyecto1.Irony_Resources
                         CharacterError = CharacterError.Split('.')[0];
 
                         // Agregar Error Lexico A Lista
-                        Variables.ErrorList.AddLast(new ErrorTable(AuxiliaryCounter, "Lexico", "El Caracter " + CharacterError + " No Es Permtdo Por El Lenguaje.", ItemError.Location.Line, ItemError.Location.Column));
+                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Lexico", "El Caracter " + CharacterError + " No Es Permtdo Por El Lenguaje.", ItemError.Location.Line, ItemError.Location.Column));
 
                     }
                     else
                     {
 
                         // Agregar Error Sintactico A Lista 
-                        Variables.ErrorList.AddLast(new ErrorTable(AuxiliaryCounter, "Sintáctico", ItemError.Message, ItemError.Location.Line, ItemError.Location.Column));
+                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Sintáctico", ItemError.Message, ItemError.Location.Line, ItemError.Location.Column));
 
                     }
 
                     // Sumar Contador
-                    AuxiliaryCounter += 1;
+                    Variables.AuxiliaryCounter += 1;
 
                 }
 
@@ -298,6 +533,7 @@ namespace Proyecto1.Irony_Resources
 
                         // Llamar A Método Traducir 
                         ItemTranslate.Execute(GlobalEnv);
+                        ItemTranslate.Translate(GlobalEnv);
 
                     }
 
@@ -384,17 +620,41 @@ namespace Proyecto1.Irony_Resources
 
         }
 
-        // Método Que Realiza Un Split A Nodo Del Arbol  Part_De_Interes (Keyword)
-        private String SplitMethod(String SplitString)
+        // Método Que Realiza Un Split A ActualNode Del Arbol  Part_De_Interes (Keyword)
+        private String SplitMethod(String SplitString, String Type)
         {
 
-            // Array Auxiliar Para Guardar El Texto Spliteado
-            String[] AuxiliaryArray = SplitString.Split(' ');
+            // Array 
+            String[] AuxiliaryArray = null;
+
+            // Verificar Tipo
+            if (Type.Equals("Value")) {
+
+                // Array Auxiliar Para Guardar El Texto Spliteado
+                AuxiliaryArray = SplitString.Split('(');
+
+            } 
+            else if(Type.Equals("Default")) 
+            {
+
+                // Array Auxiliar Para Guardar El Texto Spliteado
+                AuxiliaryArray = SplitString.Split(' ');
+
+            }
 
             // Verificar Si Hay Mas De Un Elemento En El Array 
             if(AuxiliaryArray.Length > 1)
             {
 
+                // Verificar Si Es Valor
+                if(Type.Equals("Value")) 
+                {
+
+                    // Recorrer Array
+                    AuxiliaryArray[0] = AuxiliaryArray[0].TrimEnd();
+                
+                }
+                
                 // Retornar Primera Posicion
                 return AuxiliaryArray[0];
             

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System;
 
 // ------------------------------------------------ NameSpace -------------------------------------------------------
-
 namespace Proyecto1.Misc
 {
     

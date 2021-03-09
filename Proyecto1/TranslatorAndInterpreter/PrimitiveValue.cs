@@ -5,47 +5,95 @@ using Proyecto1.Misc;
 // ------------------------------------------------ Namespace -------------------------------------------------------
 namespace Proyecto1.TranslatorAndInterpreter
 {
+    
+    // Clase Principal 
     class PrimitiveValue : AbstractExpression
     {
 
-        private object value;
-        public PrimitiveValue(object value) {
-            this.value = value;
+        // Valor 
+        private object Value;
+
+        // Constructor 
+        public PrimitiveValue(object Value) {
+
+            // Inicicalizar Valores  
+            this.Value = Value;
+        
         }
 
-        public override Retorno Execute(EnviromentTable ambiente)
+        // Métodod Ejecutar 
+        public override ObjectReturn Execute(EnviromentTable Env)
         {
-            Retorno ret = null;
 
-            int val = 0;
-            double val2 = 0;
-            if (int.TryParse(this.value.ToString(), out val))
+            // Objecto A Retornar
+            ObjectReturn AuxiliaryReturn;
+
+            // Verificar Que Tipo De Valor Primtivo ES 
+            if(int.TryParse(this.Value.ToString(), out int AuxiliaryValueI))
             {
-                ret = new Retorno(val, "integer");
-            }
-            else if (double.TryParse(this.value.ToString(), out val2))
-            {
-                ret = new Retorno(val2, "real");
+
+                // Agreagr A Objecto Valor 
+                AuxiliaryReturn = new ObjectReturn(AuxiliaryValueI, "integer");
 
             }
-            else if (this.value.ToString() == "true")
+            else if(Decimal.TryParse(this.Value.ToString(), out Decimal AuxiliaryValueD))
             {
-                ret = new Retorno(true, "boolean");
+
+                // Agregar A Objecto Valor 
+                AuxiliaryReturn = new ObjectReturn(AuxiliaryValueD, "real");
+
             }
-            else if (this.value.ToString() == "false")
+            else if(this.Value.ToString() == "true")
             {
-                ret = new Retorno(false, "boolean");
+
+                // Agregar A Objecto Valor
+                AuxiliaryReturn = new ObjectReturn(true, "boolean");
+
             }
-            else { //string
-                ret = new Retorno(this.value.ToString(), "string");
+            else if(this.Value.ToString() == "false")
+            {
+
+                // Agregar A Objecto Valor
+                AuxiliaryReturn = new ObjectReturn(false, "boolean");
+
             }
-            
-            return ret;
+            else
+            {
+
+                // Agregar A Objecto Valor
+                AuxiliaryReturn = new ObjectReturn(this.Value.ToString(), "string");
+
+            }
+
+            // Retornar 
+            return AuxiliaryReturn;
         }
 
-        public override Retorno Translate(EnviromentTable ambiente)
+        // Método Traducir
+        public override ObjectReturn Translate(EnviromentTable Env)
         {
-            throw new NotImplementedException();
+
+            // Verificar Si Es Integer, Real O Boolean
+            if (int.TryParse(this.Value.ToString(), out int Value) || Decimal.TryParse(this.Value.ToString(), out Decimal Value_) || this.Value.ToString().ToLower().Equals("true") || this.Value.ToString().ToLower().Equals("false"))
+            {
+
+                // Agregar Traduccion 
+                Variables.TranslateString += this.Value.ToString();
+
+            }
+            else 
+            {
+
+                // Agregar Traduccion 
+                Variables.TranslateString += "'" + this.Value.ToString() + "'";
+
+            }
+
+            // Retornar Null
+            return null;
+
         }
+    
     }
+
 }
