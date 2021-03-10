@@ -11,22 +11,22 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Atributos
         
         // Identifiers 
-        private String Identifiers;
+        private readonly String Identifiers;
 
         // Tipo 
-        private String Type;
+        private readonly String Type;
 
         // Tipo De Declaracion 
-        private String DecType;
+        private readonly String DecType;
 
         // Valor
-        private AbstractExpression Value;
+        private readonly AbstractExpression Value;
 
         // Token Linea
-        private int TokenLine;
+        private readonly int TokenLine;
 
         // Token Columna
-        private int TokenColumn;
+        private readonly int TokenColumn;
         
         // Constructor
         public PrimitiveDeclaration(String Identifiers, String Type, AbstractExpression Value, String DecType, int TokenLine, int TokenColumn) {
@@ -66,7 +66,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 AuxiliaryReturn = Env.AddVariable(Identifiers, Value.Type.ToString(), Value, this.DecType, Env.EnviromentName);
 
                 // Si Existe Error 
-                AddError(AuxiliaryReturn);
+                AddError(AuxiliaryReturn, Identifiers);
 
             }
             else if(this.DecType == "Var") {
@@ -79,7 +79,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 {
 
                     // Agregar Error Variables 
-                    Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "Unicamente Se Puede Realizar Asignacion A Un Unico Identificador", this.TokenLine, this.TokenColumn));
+                    Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "Unicamente Se Puede Realizar Una Asignacion A Un Unico Identificador", this.TokenLine, this.TokenColumn));
 
                 }
                 else 
@@ -102,7 +102,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                 AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, 0, this.DecType, Env.EnviromentName);
 
                                 // Si Existe Error 
-                                AddError(AuxiliaryReturn);
+                                AddError(AuxiliaryReturn, Identifier);
 
                             }
                             else if (this.Type == "string")
@@ -112,7 +112,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                 AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, "", this.DecType, Env.EnviromentName);
 
                                 // Si Existe Error 
-                                AddError(AuxiliaryReturn);
+                                AddError(AuxiliaryReturn, Identifier);
 
                             }
                             else if (this.Type == "boolean")
@@ -122,7 +122,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                 AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, false, this.DecType, Env.EnviromentName);
 
                                 // Si Existe Error 
-                                AddError(AuxiliaryReturn);
+                                AddError(AuxiliaryReturn, Identifier);
 
                             }
                             else if (this.Type == "real")
@@ -132,7 +132,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                 AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, 0.0, this.DecType, Env.EnviromentName);
 
                                 // Si Existe Error 
-                                AddError(AuxiliaryReturn);
+                                AddError(AuxiliaryReturn, Identifier);
 
                             }
                             else
@@ -169,7 +169,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                     AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName);
 
                                     // Si Existe Error 
-                                    AddError(AuxiliaryReturn);
+                                    AddError(AuxiliaryReturn, Identifier);
 
                                 }
                                 else if (Value.Type.ToString().Equals(this.Type.ToString()))
@@ -182,7 +182,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                     AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName);
 
                                     // Si Existe Error 
-                                    AddError(AuxiliaryReturn);
+                                    AddError(AuxiliaryReturn, Identifier);
 
                                 }
                                 else
@@ -243,8 +243,14 @@ namespace Proyecto1.TranslatorAndInterpreter
 
             }
 
-            // Agregar Tipo y Resto Traducción
-            Variables.TranslateString += " : " + this.Type.ToString();
+            // Verificar Si Es Variable O Constante
+            if(this.DecType.Equals("Var")) 
+            {
+
+                // Agregar Tipo y Resto Traducción
+                Variables.TranslateString += " : " + this.Type.ToString();
+
+            }
 
             // Verificar Si Hay Un Valor
             if(this.Value != null) 
@@ -267,13 +273,13 @@ namespace Proyecto1.TranslatorAndInterpreter
         }
 
         // Indicar Error
-        private void AddError(bool IsError) {
+        private void AddError(bool IsError, String Identifier) {
             
             // Verificar Si Hay Error
             if (IsError == false) {
 
                 // Agregar Error
-                Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semático", "La Variable O Constante Indicada Ya Existe En El Ambito", this.TokenLine, this.TokenColumn));
+                Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semático", "La Variable O Constante (" + Identifier + ") Ya Existe En El Ambito", this.TokenLine, this.TokenColumn));
             
             }
 

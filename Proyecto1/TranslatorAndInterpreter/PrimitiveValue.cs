@@ -11,7 +11,7 @@ namespace Proyecto1.TranslatorAndInterpreter
     {
 
         // Valor 
-        private object Value;
+        private readonly object Value;
 
         // Constructor 
         public PrimitiveValue(object Value) {

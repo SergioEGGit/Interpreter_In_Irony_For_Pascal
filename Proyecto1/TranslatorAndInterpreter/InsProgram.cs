@@ -13,7 +13,7 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Atributos
 
         // Identificador
-        public String IdentifierInsProgram;
+        public readonly String IdentifierInsProgram;
 
         // Constructor 
         public InsProgram(String IdentifierInsProgram) {
@@ -40,7 +40,7 @@ namespace Proyecto1.TranslatorAndInterpreter
         {
 
             // Traducción 
-            Variables.TranslateString += "program " + this.IdentifierInsProgram + ";\n\n";
+            Variables.TranslateString += "program " + this.IdentifierInsProgram + ";\n";
 
             // Retorno 
             return null;

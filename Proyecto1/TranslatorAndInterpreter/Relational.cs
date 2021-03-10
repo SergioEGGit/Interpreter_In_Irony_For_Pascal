@@ -12,24 +12,23 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Atributos
 
         // Expression Izquierda
-        private AbstractExpression LeftValue;
+        private readonly AbstractExpression LeftValue;
 
         // Expresssion Derecha 
-        private AbstractExpression RightValue;
+        private readonly AbstractExpression RightValue;
 
         // Tipo De Operacion
-        private String RelationalType;
+        private readonly String RelationalType;
 
         // TOken Line 
-        private int TokenLine;
+        private readonly int TokenLine;
 
         // Token Column 
-        private int TokenColumn;
+        private readonly int TokenColumn;
 
         // Constructor 
         public Relational(AbstractExpression LeftValue, AbstractExpression RightValue, String RelationalType, int TokenLine, int TokenColumn)
         {
-
 
             // Inicializar Valores 
             this.LeftValue = LeftValue;

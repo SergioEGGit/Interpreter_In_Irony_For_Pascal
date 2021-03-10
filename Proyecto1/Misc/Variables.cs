@@ -18,8 +18,14 @@ namespace Proyecto1.Misc
         // Lista Que Contiene Las Clases Del Analizador(Traducción)
         public static LinkedList<TranslatorAndInterpreter.AbstractInstruccion> TranslateList = new LinkedList<TranslatorAndInterpreter.AbstractInstruccion>();
 
+        // Lista De Ambientes
+        public static LinkedList<Misc.EnviromentTable> EnviromentList = new LinkedList<EnviromentTable>();
+
         // String Que Contiene La Traduccion 
         public static String TranslateString = "";
+
+        // String Que Contiene La Ejecucion
+        public static String ExecuteString = "";
 
         // Contador De Errores 
         public static int AuxiliaryCounter;

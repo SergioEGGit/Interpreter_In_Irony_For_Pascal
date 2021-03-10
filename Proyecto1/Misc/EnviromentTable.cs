@@ -22,12 +22,16 @@ namespace Proyecto1.Misc
         public String EnviromentName;
 
         // Constructor 
-        public EnviromentTable(EnviromentTable ParentEnviroment, String EnviromentName) {
+        public EnviromentTable(EnviromentTable ParentEnviroment, String EnviromentName) 
+        {
 
             // Inicializar Valores 
             this.ParentEnviroment = ParentEnviroment;
             this.PrimitiveVariables = new Dictionary<String, SymbolTable>();
             this.EnviromentName = EnviromentName;
+
+            // Agregar Entorno A Lista 
+            Variables.EnviromentList.AddLast(this);
         
         }
 

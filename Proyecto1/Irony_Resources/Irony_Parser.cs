@@ -34,7 +34,8 @@ namespace Proyecto1.Irony_Resources
                 // Lista De Delcaraciones 
                 Declarations(RootNode.ChildNodes[1]);
 
-                // Main Block 
+                // Main Block
+                MainBlock(RootNode.ChildNodes[2]);
 
             }
             else if (RootNode.ChildNodes.Count == 2)
@@ -44,7 +45,7 @@ namespace Proyecto1.Irony_Resources
                 InsProgram(RootNode.ChildNodes[0]);
 
                 // Lista De Delcaraciones 
-                Declarations(RootNode.ChildNodes[1]);
+                MainBlock(RootNode.ChildNodes[1]);
 
             }
             else
@@ -101,7 +102,14 @@ namespace Proyecto1.Irony_Resources
 
                 // Delcaracions De Variables
                 VariablesDeclaration(ActualNode.ChildNodes[0]);
-  
+
+            }
+            else if(ActualNode.ChildNodes[0].ToString().Equals("ConstantsDeclaration")) 
+            {
+
+                // Declaraciones De Constantes
+                ConstantsDeclaration(ActualNode.ChildNodes[0]);
+            
             }
 
         }
@@ -239,6 +247,247 @@ namespace Proyecto1.Irony_Resources
             
             }
         
+        }
+
+        // Declaracion De Constantes 
+        public void ConstantsDeclaration(ParseTreeNode ActualNode) 
+        {
+
+            // Agregar Clase Declaracion De Variables 
+            Variables.TranslateList.AddLast(new ConstantsDeclaration());
+
+            // Bloque Declaracion
+            ConstantsDeclarationBlock(ActualNode.ChildNodes[1]);
+
+        }
+
+        // Bloque Declaracion
+        public void ConstantsDeclarationBlock(ParseTreeNode ActualNode) 
+        {
+
+            // Verificar Camino A Seguir
+            if (ActualNode.ChildNodes.Count == 2)
+            {
+
+                // Bloque Declaracion
+                ConstantsDeclarationBlock(ActualNode.ChildNodes[0]);
+
+                // LIsta De Declaraciones
+                Constants(ActualNode.ChildNodes[1]);
+
+            }
+            else if (ActualNode.ChildNodes.Count == 1)
+            {
+
+                // Lista De Declaraciones 
+                Constants(ActualNode.ChildNodes[0]);
+
+            }
+
+        }
+
+        // Constantes
+        public void Constants(ParseTreeNode ActualNode) 
+        {
+
+            // Obtener Identificadores 
+            String Identifier = SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default");
+
+            // Expression
+            AbstractExpression Expression_ = Expression(ActualNode.ChildNodes[2]);
+
+            // Verificar Token 
+            if (ActualNode.ChildNodes[0].ChildNodes.Count == 3)
+            {
+
+                // Columna Token 
+                Variables.TokenColumn = ActualNode.ChildNodes[0].ChildNodes[2].Token.Location.Column;
+
+                // Fila Token 
+                Variables.TokenLine = ActualNode.ChildNodes[0].ChildNodes[2].Token.Location.Column;
+
+            }
+            else if (ActualNode.ChildNodes[0].ChildNodes.Count == 1)
+            {
+
+                // Columna Token 
+                Variables.TokenColumn = ActualNode.ChildNodes[0].ChildNodes[0].Token.Location.Column;
+
+                // Fila Token 
+                Variables.TokenLine = ActualNode.ChildNodes[0].ChildNodes[0].Token.Location.Column;
+
+            }
+
+            // Agregar A Lista De Clases 
+            Variables.TranslateList.AddLast(new PrimitiveDeclaration(Identifier, "", Expression_, "Const", Variables.TokenColumn, Variables.TokenLine));
+
+        }
+
+        // Main Block
+        public void MainBlock(ParseTreeNode ActualNode) 
+        {
+            
+            // Verificar Camino A Seguir
+            if(ActualNode.ChildNodes.Count == 4)
+            {
+                
+                // Agregar Instrucciones
+                Variables.TranslateList.AddLast(new MainBlock(Instruccions(ActualNode.ChildNodes[1])));
+
+            }
+            else if(ActualNode.ChildNodes.Count == 3)
+            {
+
+                // Agregar Bloque Sin Instrucciones
+                Variables.TranslateList.AddLast(new MainBlock(null));
+
+            }
+            
+        }
+
+        // Lista De Instrucciones
+        public LinkedList<AbstractInstruccion> Instruccions(ParseTreeNode ActualNode) 
+        {
+
+            // Verificar Camino A Seguir
+            if (ActualNode.ChildNodes.Count == 2)
+            {
+
+                // Lista De Instrucciones
+                LinkedList<AbstractInstruccion> AuxiliaryList = Instruccions(ActualNode.ChildNodes[0]);
+
+                // Instruccion
+                AuxiliaryList.AddLast(Instruccion(ActualNode.ChildNodes[1]));
+
+                // Retornar 
+                return AuxiliaryList;
+
+            }
+            else if(ActualNode.ChildNodes.Count == 1) 
+            {
+
+                // Agregar De Lista 
+                LinkedList<AbstractInstruccion> AuxiliaryList = new LinkedList<AbstractInstruccion>();
+
+                // Agregar A Lista 
+                AuxiliaryList.AddLast(Instruccion(ActualNode.ChildNodes[0]));
+
+                // Retornar 
+                return AuxiliaryList;
+            
+            }
+
+            // Retornar Null
+            return null;
+        
+        }
+
+        // Instruccion
+        public AbstractInstruccion Instruccion(ParseTreeNode ActualNode) 
+        {
+              
+            // Verificar Instruccion
+            if(ActualNode.ChildNodes[0].ToString().Equals("InsWrite")) 
+            {
+
+                // Instruccion Write 
+                return InsWrite(ActualNode.ChildNodes[0]);
+            
+            }
+
+            // Retornar
+            return null;
+
+        }
+
+        // Instruccion Write
+        public AbstractInstruccion InsWrite(ParseTreeNode ActualNode) 
+        {
+            
+            // Verificar Camino A Seguir 
+            if(ActualNode.ChildNodes.Count == 5 && SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default").Equals("writeln")) 
+            {
+
+                // Retornar Instruccion
+                return new InsWrite("WriteLine", ParamsValueList(ActualNode.ChildNodes[2]), "");
+
+            } 
+            else if(ActualNode.ChildNodes.Count == 4 && SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default").Equals("writeln"))
+            {
+
+                // Retornar Instruccion
+                return new InsWrite("WriteLine", null, "2");
+
+            }
+            else if(ActualNode.ChildNodes.Count == 2 && SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default").Equals("writeln"))
+            {
+
+                // Retornar Instruccion
+                return new InsWrite("WriteLine", null, "");
+
+            }
+            else if(ActualNode.ChildNodes.Count == 5 && SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default").Equals("write"))
+            {
+
+                // Retornar Instruccion
+                return new InsWrite("Write", ParamsValueList(ActualNode.ChildNodes[2]), "");
+
+            }
+            else if(ActualNode.ChildNodes.Count == 4 && SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default").Equals("write"))
+            {
+
+                // Retornar Instruccion
+                return new InsWrite("Write", null, "2");
+
+            }
+            else if(ActualNode.ChildNodes.Count == 2 && SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default").Equals("write"))
+            {
+
+                // Retornar Instruccion
+                return new InsWrite("Write", null, "");
+
+            }
+
+            // Retornar 
+            return null;
+        
+        }
+
+        // Lista De Valores Parametros
+        public LinkedList<AbstractExpression> ParamsValueList(ParseTreeNode ActualNode)
+        {
+
+            // Verificar Camino A Seguir 
+            if (ActualNode.ChildNodes.Count == 3)
+            {
+
+                // Lista De Instrucciones
+                LinkedList<AbstractExpression> AuxiliaryList = ParamsValueList(ActualNode.ChildNodes[0]);
+
+                // Instruccion
+                AuxiliaryList.AddLast(Expression(ActualNode.ChildNodes[2]));
+
+                // Retornar 
+                return AuxiliaryList;
+
+            }
+            else if (ActualNode.ChildNodes.Count == 1)
+            {
+
+                // Agregar De Lista 
+                LinkedList<AbstractExpression> AuxiliaryList = new LinkedList<AbstractExpression>();
+
+                // Agregar A Lista 
+                AuxiliaryList.AddLast(Expression(ActualNode.ChildNodes[0]));
+
+                // Retornar 
+                return AuxiliaryList;
+
+            }
+
+            // Retornar 
+            return null;
+
         }
 
         // Expresion
@@ -409,9 +658,6 @@ namespace Proyecto1.Irony_Resources
                 return AuxiliaryReturn;
 
             }
-            
-            // Null
-            return null;
  
         }
 
@@ -520,6 +766,18 @@ namespace Proyecto1.Irony_Resources
 
                     // Limpiar Variable Traduccion 
                     Variables.TranslateString = "";
+
+                    // Limpiar Fila
+                    Variables.TokenLine = 0;
+
+                    // Limpiar Columna 
+                    Variables.TokenColumn = 0;
+
+                    // Limpiar Lista De Ambientes 
+                    Variables.ExecuteString = "";
+
+                    // Lista De Ambientes 
+                    Variables.EnviromentList = new LinkedList<EnviromentTable>();
 
                     // Ejecutar Recorrido Del Arbol 
                     Begin(RootTreeNode);

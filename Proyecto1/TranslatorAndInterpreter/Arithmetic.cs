@@ -14,19 +14,19 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Atributos
 
         // Expression Izquierda
-        private AbstractExpression LeftValue;
+        private readonly AbstractExpression LeftValue;
 
         // Expresssion Derecha 
-        private AbstractExpression RightValue;
+        private readonly AbstractExpression RightValue;
 
         // Tipo De Operacion
-        private String ArithmeticType;
+        private readonly String ArithmeticType;
 
         // TOken Line 
-        private int TokenLine;
+        private readonly int TokenLine;
 
         // Token Column 
-        private int TokenColumn;
+        private readonly int TokenColumn;
          
         // Constructor 
         public Arithmetic(AbstractExpression LeftValue, AbstractExpression RightValue, String ArithmeticType, int TokenLine, int TokenColumn) {

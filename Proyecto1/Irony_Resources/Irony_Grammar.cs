@@ -39,6 +39,9 @@ namespace Proyecto1.Irony_Resources
                 // Boolean 
                 RegexBasedTerminal SimpleBoolean = new RegexBasedTerminal("SimpleBoolean", "true|false");
 
+                // Writes
+                RegexBasedTerminal ReservedWriteLine = new RegexBasedTerminal("ReservedWriteLine", "writeln|write");
+
             #endregion
 
             // Región Terminales
@@ -110,9 +113,9 @@ namespace Proyecto1.Irony_Resources
 
                 BnfTerm ReservedExit = ToTerm("exit");
 
-                BnfTerm ReservedWrite = ToTerm("write");
+                //BnfTerm ReservedWrite = ToTerm("write");
 
-                BnfTerm ReservedWriteLine = ToTerm("writeline");
+                //BnfTerm ReservedWriteLine = ToTerm("writeline");
 
                 BnfTerm ReservedGraficar = ToTerm("graficar_ts");
 
@@ -400,8 +403,8 @@ namespace Proyecto1.Irony_Resources
             #region Grammar
 
                 // Inicio 
-                Begin.Rule                          = InsProgram + Declarations //+ MainBlock
-                                                   //| InsProgram + MainBlock
+                Begin.Rule                          = InsProgram + Declarations + MainBlock
+                                                    | InsProgram + MainBlock
                                                     | Eof
                                                     ;
 
@@ -426,6 +429,9 @@ namespace Proyecto1.Irony_Resources
 
                 // Declaracion Individual
                 Declaration.Rule                    = VariablesDeclaration
+                                                    | ConstantsDeclaration
+                                                    //| Functions
+                                                    //| ArraysObjects
                                                     ;
 
                 // Produccion De Errores 
@@ -484,6 +490,66 @@ namespace Proyecto1.Irony_Resources
                                                     | SyntaxError + ReservedEnd
                                                     ;
 
+                // Constantes 
+                ConstantsDeclaration.Rule           = ReservedConst + ConstantsDeclarationBlock
+                                                    ;
+
+                // Bloque Constantes 
+                ConstantsDeclarationBlock.Rule      = ConstantsDeclarationBlock + Constants
+                                                    | Constants
+                                                    ;
+
+                // Declaracion De Una Constante 
+                Constants.Rule                      = SimpleIdentifier + OperatorEqual + Expression + SymbolSemiColon
+                                                    ;
+
+                // Produccion De Errores 
+                Constants.ErrorRule                 = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Main Block 
+                MainBlock.Rule                      = ReservedBegin + Instruccions + ReservedEnd + SymbolPoint
+                                                    | ReservedBegin + ReservedEnd + SymbolPoint
+                                                    ;
+
+                // Produccion De Error 
+                MainBlock.ErrorRule                 = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Instrucciones 
+                Instruccions.Rule                   = Instruccions + Instruccion
+                                                    | Instruccion
+                                                    ;
+
+                // Instruccion 
+                Instruccion.Rule                    = InsWrite
+                                                    //| VariablesAsignation
+                                                    //| InsIf
+                                                    //| InsCase
+                                                    //| InsWhile
+                                                    //| InsFor
+                                                    //| InsRepeat
+                                                    //| InsGraficarTS
+                                                    ;
+
+                // Producción De Error 
+                Instruccion.ErrorRule               = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Imprimir En Consola
+                InsWrite.Rule                       = ReservedWriteLine + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
+                                                    | ReservedWriteLine + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                    | ReservedWriteLine + SymbolSemiColon
+                                                    ;
+
+                // Params List 
+                ParamsValueList.Rule                = ParamsValueList + SymbolComma + Expression
+                                                    | Expression
+                                                    ;
+
                 // Expresiones 
                 Expression.Rule                     = SymbolLeftParenthesis + Expression + SymbolRightParenthesis
                                                     | Expression + OperatorPlus + Expression
@@ -521,17 +587,11 @@ namespace Proyecto1.Irony_Resources
                                                     | SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket
                                                     */;
 
-            // Main Block 
-            /*MainBlock.Rule = ReservedBegin + Instruccions + ReservedEnd + SymbolPoint
-                                            | ReservedBegin + ReservedEnd + SymbolPoint
-                                            ;*/
-
-
-            // Instruccion Comentarios 
-            //Comments.Rule               = OneLineComment
-            //                            | MultiLineComment1
-            //                            | MultiLineComment2
-            //                            ;
+                // Instruccion Comentarios 
+                //Comments.Rule               = OneLineComment
+                //                            | MultiLineComment1
+                //                            | MultiLineComment2
+                //                            ;
 
             #endregion
 

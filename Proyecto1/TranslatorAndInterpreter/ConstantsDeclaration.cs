@@ -6,10 +6,10 @@ using Proyecto1.Misc;
 namespace Proyecto1.TranslatorAndInterpreter
 {
 
-    // Clase Principal 
-    class VariablesDeclaration : AbstractInstruccion
+    // Clase Principal
+    class ConstantsDeclaration : AbstractInstruccion
     {
-        
+
         // Método Ejecutar 
         public override object Execute(EnviromentTable Env)
         {
@@ -24,13 +24,13 @@ namespace Proyecto1.TranslatorAndInterpreter
         {
 
             // Agregar ha Traduccion
-            Variables.TranslateString += "\n   var \n";
+            Variables.TranslateString += "\n   const \n";
 
             // Retornar Null
             return null;
 
         }
-    
+
     }
 
 }

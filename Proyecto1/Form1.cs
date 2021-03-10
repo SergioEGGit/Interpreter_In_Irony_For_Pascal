@@ -38,8 +38,15 @@ namespace Proyecto1
             // Agregar Traduccion
             TextEntrance.Text = Variables.TranslateString;
 
+            // Limpiar Consola 
+            TextConsole.Text = "";
+
+            // Agregar Ejecucion
+            TextConsole.Text = Variables.ExecuteString;
+
         }
 
+        // Acción Click Botón Ejecutar
         private void ButtonExecute_Click(object sender, EventArgs e)
         {
 
