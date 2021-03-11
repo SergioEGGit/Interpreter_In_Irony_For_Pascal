@@ -55,13 +55,13 @@ namespace Proyecto1.TranslatorAndInterpreter
         {
             
             // Agregar Traduccion 
-            Variables.TranslateString += "(";
+            VariablesMethods.TranslateString += "(";
             
             // Traducir Valor 
             this.Value.Translate(Env);
 
             // Agregar Traduccion 
-            Variables.TranslateString += ")";
+            VariablesMethods.TranslateString += ")";
 
             // Retornar 
             return null;

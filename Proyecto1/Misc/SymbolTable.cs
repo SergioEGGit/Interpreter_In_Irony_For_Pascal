@@ -26,8 +26,14 @@ namespace Proyecto1.Misc
         // Ambito 
         public String Env;
 
+        // Fila 
+        public int Line;
+
+        // Columna 
+        public int Column;
+
         // Constructor 
-         public SymbolTable(String Identifier, String Type, object Value, String DecType, String Env) {
+         public SymbolTable(String Identifier, String Type, object Value, String DecType, String Env, int Line, int Column) {
 
             // Incializar Valores
             this.Identifier = Identifier;
@@ -35,6 +41,8 @@ namespace Proyecto1.Misc
             this.Value = Value;
             this.DecType = DecType;
             this.Env = Env;
+            this.Line = Line;
+            this.Column = Column;
          
          }
 

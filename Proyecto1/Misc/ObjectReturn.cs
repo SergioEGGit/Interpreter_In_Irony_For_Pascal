@@ -16,6 +16,9 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Tipo Expression
         public object Type;
 
+        // Opcional
+        //public String Opcional;
+
         // Constructor 
         public ObjectReturn(object Value, object Type) {
 

@@ -31,12 +31,12 @@ namespace Proyecto1.Misc
             this.EnviromentName = EnviromentName;
 
             // Agregar Entorno A Lista 
-            Variables.EnviromentList.AddLast(this);
+            VariablesMethods.EnviromentList.AddLast(this);
         
         }
 
         // Agregar Variable A Tabla De Simbolos
-        public bool AddVariable(String Identifier, String Type, object Value, String DecType, String Env) {
+        public bool AddVariable(String Identifier, String Type, object Value, String DecType, String Env, int Line, int Column) {
 
             // Verificar si La Variable Existe En El Ambito
             if(this.PrimitiveVariables.ContainsKey(Identifier.ToLower())) {
@@ -47,11 +47,38 @@ namespace Proyecto1.Misc
             }
 
             // Agregar Variable A Lista De Simbolos
-            this.PrimitiveVariables.Add(Identifier.ToLower(), new SymbolTable(Identifier, Type, Value, DecType, Env));
+            this.PrimitiveVariables.Add(Identifier.ToLower(), new SymbolTable(Identifier, Type, Value, DecType, Env, Line, Column));
             
             // Agregada Con Exito
             return true;
             
+        }
+
+        // Graficar Tabla De Simbolos
+        public LinkedList<EnviromentTable> GraphSymbolTable() 
+        {
+
+            // Obtener Entorno Actual
+            EnviromentTable ActualEnv = this;
+
+            // Lista Auxiliar 
+            LinkedList<EnviromentTable> AuxiliaryList = new LinkedList<EnviromentTable>();
+
+            // Recorrer Entornos
+            while(ActualEnv != null) 
+            {
+
+                // Agregar Entorno A Lista 
+                AuxiliaryList.AddFirst(ActualEnv);
+
+                // Recorrer Entorno
+                ActualEnv = ActualEnv.ParentEnviroment;
+            
+            }
+
+            // Retorno Lista 
+            return AuxiliaryList;
+        
         }
 
     }

@@ -131,7 +131,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Error 
-                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "No Se Permite <= Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
+                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "No Se Permite <= Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
 
                     }
 
@@ -190,7 +190,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Error 
-                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "No Se Permite >= Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
+                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "No Se Permite >= Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
 
                     }
 
@@ -249,7 +249,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Error 
-                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "No Se Permite < Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
+                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "No Se Permite < Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
 
                     }
 
@@ -308,7 +308,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Error 
-                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "No Se Permite > Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
+                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "No Se Permite > Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
 
                     }
 
@@ -407,7 +407,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Error 
-                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "No Se Permite = Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
+                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "No Se Permite = Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
 
                     }
 
@@ -506,7 +506,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Error 
-                        Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "No Se Permite <> Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
+                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "No Se Permite <> Entre Los Tipos " + Left.Type.ToString() + " Y " + Right.Type.ToString(), this.TokenLine, this.TokenColumn));
 
                     }
 
@@ -530,7 +530,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 this.LeftValue.Translate(Env);
 
                 // Agregar Traduccion 
-                Variables.TranslateString += " <= ";
+                VariablesMethods.TranslateString += " <= ";
 
                 // Traducir Valor Derecha
                 this.RightValue.Translate(Env);
@@ -543,7 +543,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 this.LeftValue.Translate(Env);
 
                 // Agregar Traduccion 
-                Variables.TranslateString += " >= ";
+                VariablesMethods.TranslateString += " >= ";
 
                 // Traducir Valor Derecha
                 this.RightValue.Translate(Env);
@@ -556,7 +556,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 this.LeftValue.Translate(Env);
 
                 // Agregar Traduccion 
-                Variables.TranslateString += " < ";
+                VariablesMethods.TranslateString += " < ";
 
                 // Traducir Valor Derecha
                 this.RightValue.Translate(Env);
@@ -569,7 +569,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 this.LeftValue.Translate(Env);
 
                 // Agregar Traduccion 
-                Variables.TranslateString += " > ";
+                VariablesMethods.TranslateString += " > ";
 
                 // Traducir Valor Derecha
                 this.RightValue.Translate(Env);
@@ -582,7 +582,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 this.LeftValue.Translate(Env);
 
                 // Agregar Traduccion 
-                Variables.TranslateString += " = ";
+                VariablesMethods.TranslateString += " = ";
 
                 // Traducir Valor Derecha
                 this.RightValue.Translate(Env);
@@ -595,7 +595,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 this.LeftValue.Translate(Env);
 
                 // Agregar Traduccion 
-                Variables.TranslateString += " <> ";
+                VariablesMethods.TranslateString += " <> ";
 
                 // Traducir Valor Derecha
                 this.RightValue.Translate(Env);

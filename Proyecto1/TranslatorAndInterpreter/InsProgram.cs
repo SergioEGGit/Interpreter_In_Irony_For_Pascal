@@ -15,11 +15,19 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Identificador
         public readonly String IdentifierInsProgram;
 
+        // Linea
+        public readonly int TokenLine;
+
+        // Columna
+        public readonly int TokenColumn;
+
         // Constructor 
-        public InsProgram(String IdentifierInsProgram) {
+        public InsProgram(String IdentifierInsProgram, int TokenLine, int TokenColumn) {
 
             // Inicializar Valores
             this.IdentifierInsProgram = IdentifierInsProgram;
+            this.TokenLine = TokenLine;
+            this.TokenColumn = TokenColumn;
         
         }
         
@@ -27,8 +35,11 @@ namespace Proyecto1.TranslatorAndInterpreter
         public override object Execute(EnviromentTable Env)
         {
 
+            // Agregar Value 
+            ObjectReturn Value = new ObjectReturn("-", "program");
+            
             // Agregar Identificador A Tabla Simbolos
-            Env.AddVariable(this.IdentifierInsProgram, "program", null, "program", Env.EnviromentName);
+            Env.AddVariable(this.IdentifierInsProgram, "program", Value, "program", Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
             // Retorno 
             return null;
@@ -40,7 +51,7 @@ namespace Proyecto1.TranslatorAndInterpreter
         {
 
             // Traducción 
-            Variables.TranslateString += "program " + this.IdentifierInsProgram + ";\n";
+            VariablesMethods.TranslateString += VariablesMethods.Ident() + "program " + this.IdentifierInsProgram + ";\n";
 
             // Retorno 
             return null;

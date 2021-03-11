@@ -50,7 +50,7 @@ namespace Proyecto1.TranslatorAndInterpreter
             {
 
                 // Agregar Errores Constantes 
-                Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "Una Constante Siempre Debe De Ser Inicializada Con Un Valor", this.TokenLine, this.TokenColumn));
+                VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "Una Constante Siempre Debe De Ser Inicializada Con Un Valor", this.TokenLine, this.TokenColumn));
 
             }
             else if (this.DecType == "Const" && this.Value != null)
@@ -63,7 +63,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 ObjectReturn Value = this.Value.Execute(Env);
 
                 // Agregar Variable 
-                AuxiliaryReturn = Env.AddVariable(Identifiers, Value.Type.ToString(), Value, this.DecType, Env.EnviromentName);
+                AuxiliaryReturn = Env.AddVariable(Identifiers, Value.Type.ToString(), Value, this.DecType, Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
                 // Si Existe Error 
                 AddError(AuxiliaryReturn, Identifiers);
@@ -79,7 +79,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 {
 
                     // Agregar Error Variables 
-                    Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "Unicamente Se Puede Realizar Una Asignacion A Un Unico Identificador", this.TokenLine, this.TokenColumn));
+                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "Unicamente Se Puede Realizar Una Asignacion A Un Unico Identificador", this.TokenLine, this.TokenColumn));
 
                 }
                 else 
@@ -95,11 +95,18 @@ namespace Proyecto1.TranslatorAndInterpreter
                             // Variable Auxiliar 
                             bool AuxiliaryReturn;
 
+                            // Objeto 
+                            ObjectReturn Value = new ObjectReturn("", ""); ;
+
                             if (this.Type == "integer")
                             {
 
+                                // Crear Valor 
+                                Value.Type = "integer";
+                                Value.Value = 0;
+
                                 // Verificar Si La Variable Existe O NO 
-                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, 0, this.DecType, Env.EnviromentName);
+                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
                                 // Si Existe Error 
                                 AddError(AuxiliaryReturn, Identifier);
@@ -108,8 +115,12 @@ namespace Proyecto1.TranslatorAndInterpreter
                             else if (this.Type == "string")
                             {
 
+                                // Crear Valor 
+                                Value.Type = "string";
+                                Value.Value = "";
+
                                 // Verificar Si La Variable Existe O No 
-                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, "", this.DecType, Env.EnviromentName);
+                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
                                 // Si Existe Error 
                                 AddError(AuxiliaryReturn, Identifier);
@@ -118,8 +129,12 @@ namespace Proyecto1.TranslatorAndInterpreter
                             else if (this.Type == "boolean")
                             {
 
+                                // Crear Valor 
+                                Value.Type = "boolean";
+                                Value.Value = false;
+
                                 // Verificar Si La Variable Existe O No 
-                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, false, this.DecType, Env.EnviromentName);
+                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
                                 // Si Existe Error 
                                 AddError(AuxiliaryReturn, Identifier);
@@ -128,8 +143,12 @@ namespace Proyecto1.TranslatorAndInterpreter
                             else if (this.Type == "real")
                             {
 
+                                // Crear Valor 
+                                Value.Type = "real";
+                                Value.Value = 0.0;
+
                                 // Verificar Si La Variable Existe O No 
-                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, 0.0, this.DecType, Env.EnviromentName);
+                                AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
                                 // Si Existe Error 
                                 AddError(AuxiliaryReturn, Identifier);
@@ -166,7 +185,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                     Value.Type = "real";
 
                                     // Verificar Si La Variable Existe O No 
-                                    AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName);
+                                    AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
                                     // Si Existe Error 
                                     AddError(AuxiliaryReturn, Identifier);
@@ -179,7 +198,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                     bool AuxiliaryReturn;
 
                                     // Verificar Si La Variable Existe O No 
-                                    AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName);
+                                    AuxiliaryReturn = Env.AddVariable(Identifier, this.Type, Value, this.DecType, Env.EnviromentName, this.TokenLine, this.TokenColumn);
 
                                     // Si Existe Error 
                                     AddError(AuxiliaryReturn, Identifier);
@@ -189,7 +208,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                                 {
 
                                     // Agregar Error 
-                                    Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semántico", "El Valor Asignado (" + Value.Type.ToString() + ") No Coinicide con El Tipo De Variable (" + this.Type.ToString() + ")", this.TokenLine, this.TokenColumn));
+                                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "El Valor Asignado (" + Value.Type.ToString() + ") No Coinicide con El Tipo De Variable (" + this.Type.ToString() + ")", this.TokenLine, this.TokenColumn));
 
                                 }
 
@@ -214,7 +233,7 @@ namespace Proyecto1.TranslatorAndInterpreter
             String[] IdentifierList = this.Identifiers.Split(',');
 
             // Agregar Identacion
-            Variables.TranslateString += "        ";
+            VariablesMethods.TranslateString += VariablesMethods.Ident();
 
             // Contador Auxiliar
             int AuxiliaryCounter = 1;
@@ -228,14 +247,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 {
 
                     // Agregar Sin Coma 
-                    Variables.TranslateString += Identifier;
+                    VariablesMethods.TranslateString += Identifier;
 
                 }
                 else 
                 {
 
                     // Agregar Traduccion 
-                    Variables.TranslateString += Identifier + ", ";
+                    VariablesMethods.TranslateString += Identifier + ", ";
 
                 }
 
@@ -248,7 +267,7 @@ namespace Proyecto1.TranslatorAndInterpreter
             {
 
                 // Agregar Tipo y Resto Traducción
-                Variables.TranslateString += " : " + this.Type.ToString();
+                VariablesMethods.TranslateString += " : " + this.Type.ToString();
 
             }
 
@@ -257,7 +276,7 @@ namespace Proyecto1.TranslatorAndInterpreter
             {
 
                 // Agregar Traduccion
-                Variables.TranslateString += " = ";
+                VariablesMethods.TranslateString += " = ";
 
                 // Ejecutar Metodo Traducir 
                 this.Value.Translate(Env);
@@ -265,7 +284,7 @@ namespace Proyecto1.TranslatorAndInterpreter
             }
 
             // Agregar Final 
-            Variables.TranslateString += "; \n";
+            VariablesMethods.TranslateString += "; \n";
 
             // Retonar 
             return null;
@@ -279,7 +298,7 @@ namespace Proyecto1.TranslatorAndInterpreter
             if (IsError == false) {
 
                 // Agregar Error
-                Variables.ErrorList.AddLast(new ErrorTable(Variables.AuxiliaryCounter, "Semático", "La Variable O Constante (" + Identifier + ") Ya Existe En El Ambito", this.TokenLine, this.TokenColumn));
+                VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semático", "La Variable O Constante (" + Identifier + ") Ya Existe En El Ambito", this.TokenLine, this.TokenColumn));
             
             }
 

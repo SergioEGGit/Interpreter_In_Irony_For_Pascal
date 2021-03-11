@@ -26,14 +26,13 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Método Ejecutar
         public override object Execute(EnviromentTable Env)
         {
+            // Nuevo Ambiente 
+            EnviromentTable MainEnv = new EnviromentTable(Env, "Env_Main");
 
             // Verificar Si No Esta Nullo
-            if (this.IntruccionsList.Count > 0) 
+            if (this.IntruccionsList != null) 
             {
 
-                // Nuevo Ambiente 
-                EnviromentTable MainEnv = new EnviromentTable(Env, "Env_Main");
-                
                 // Recorrer Lista De Instrucciones 
                 foreach(AbstractInstruccion Instruccion in this.IntruccionsList) 
                 {
@@ -50,33 +49,46 @@ namespace Proyecto1.TranslatorAndInterpreter
 
         }
 
+        // Método Traducir
         public override object Translate(EnviromentTable Env)
         {
 
-            //Verificar Si No Hay Instrucciones 
-            if(this.IntruccionsList.Count > 0) 
+            // Agregar Traduccion
+            VariablesMethods.TranslateString += "\nbegin\n";
+
+            // Nuevo Ambiente 
+            EnviromentTable MainEnv = new EnviromentTable(Env, "Env_Main");
+
+            // Agregar A Pila
+            VariablesMethods.AuxiliaryPile.Push("_");
+
+            if(this.IntruccionsList != null) 
             {
 
-                // Agregar Traduccion
-                Variables.TranslateString += "\nbegin\n";
-
-                // Nuevo Ambiente 
-                EnviromentTable MainEnv = new EnviromentTable(Env, "Env_Main");
-
                 // Recorrer Lista 
-                foreach (AbstractInstruccion Instruccion in this.IntruccionsList) 
+                foreach (AbstractInstruccion Instruccion in this.IntruccionsList)
                 {
 
                     // Traducir 
                     Instruccion.Translate(MainEnv);
-                
+
                 }
 
+            }
+            else
+            {
+
                 // Agregar Traduccion
-                Variables.TranslateString += "\nend.\n";
+                VariablesMethods.TranslateString += "\n \n";
 
             }
 
+            // Pop A Pila 
+            VariablesMethods.AuxiliaryPile.Pop();
+
+            // Agregar Traduccion
+            VariablesMethods.TranslateString += "\nend.\n";
+            
             // Retornar 
             return null;
 

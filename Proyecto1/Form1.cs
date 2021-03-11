@@ -36,13 +36,13 @@ namespace Proyecto1
             TextEntrance.Text = "";
 
             // Agregar Traduccion
-            TextEntrance.Text = Variables.TranslateString;
+            TextEntrance.Text = VariablesMethods.TranslateString;
 
             // Limpiar Consola 
             TextConsole.Text = "";
 
             // Agregar Ejecucion
-            TextConsole.Text = Variables.ExecuteString;
+            TextConsole.Text = VariablesMethods.ExecuteString;
 
         }
 
@@ -56,7 +56,7 @@ namespace Proyecto1
         private void ButtonReports_Click(object sender, EventArgs e)
         {
 
-            foreach(var Error in Variables.ErrorList) {
+            foreach(var Error in VariablesMethods.ErrorList) {
 
                 MessageBox.Show(Error.ErrorDescripcion);
             

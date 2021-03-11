@@ -430,6 +430,7 @@ namespace Proyecto1.Irony_Resources
                 // Declaracion Individual
                 Declaration.Rule                    = VariablesDeclaration
                                                     | ConstantsDeclaration
+                                                    | InsGraficarTS
                                                     //| Functions
                                                     //| ArraysObjects
                                                     ;
@@ -526,12 +527,12 @@ namespace Proyecto1.Irony_Resources
                 // Instruccion 
                 Instruccion.Rule                    = InsWrite
                                                     //| VariablesAsignation
-                                                    //| InsIf
+                                                    | InsIf
                                                     //| InsCase
-                                                    //| InsWhile
-                                                    //| InsFor
-                                                    //| InsRepeat
-                                                    //| InsGraficarTS
+                                                    | InsWhile
+                                                    | InsFor
+                                                    | InsRepeat
+                                                    | InsGraficarTS
                                                     ;
 
                 // Producción De Error 
@@ -548,6 +549,78 @@ namespace Proyecto1.Irony_Resources
                 // Params List 
                 ParamsValueList.Rule                = ParamsValueList + SymbolComma + Expression
                                                     | Expression
+                                                    ;
+
+                // Graficar Ts 
+                InsGraficarTS.Rule                  = ReservedGraficar + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                    | ReservedGraficar + SymbolSemiColon
+                                                    ;
+
+                // If Else 
+                InsIf.Rule                          = ReservedIf + Expression + ReservedThen + IfBlock + InsElse
+                                                    ;
+
+                // Bloque if 
+                IfBlock.Rule                        = ReservedBegin + Instruccions + ReservedEnd
+                                                    | ReservedBegin + ReservedEnd
+                                                    ;
+
+                // Produccion De Error
+                IfBlock.ErrorRule                   = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Else 
+                InsElse.Rule                        = ReservedElse + IfBlock + SymbolSemiColon
+                                                    | ReservedElse + InsIf
+                                                    | SymbolSemiColon
+                                                    ;
+
+                // Produccion De Error
+                InsElse.ErrorRule                   = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // While Do 
+                InsWhile.Rule                       = ReservedWhile + Expression + ReservedDo + WhileBlock
+                                                    ;          
+
+                // While Block
+                WhileBlock.Rule                     = ReservedBegin + Instruccions + ReservedEnd + SymbolSemiColon
+                                                    | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                    ;
+
+                // Produccion De Error
+                WhileBlock.ErrorRule                = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Until Repeat
+                InsRepeat.Rule                      = ReservedRepeat + RepeatBlock + ReservedUntil + Expression + SymbolSemiColon
+                                                    ;
+
+                // Bloque Repeat 
+                RepeatBlock.Rule                    = ReservedBegin + Instruccions + ReservedEnd + SymbolSemiColon
+                                                    | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                    ;
+
+                // Produccion De Error
+                RepeatBlock.ErrorRule               = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // For 
+                InsFor.Rule                         = ReservedFor + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + ReservedTo + Expression + ReservedDo + ForBlock
+                                                    ;
+
+                // Bloque For 
+                ForBlock.Rule                       = ReservedBegin + Instruccions + ReservedEnd + SymbolSemiColon
+                                                    | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                    ;
+
+                // Produccion De Error
+                ForBlock.ErrorRule                  = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
                                                     ;
 
                 // Expresiones 

@@ -24,7 +24,7 @@ namespace Proyecto1.TranslatorAndInterpreter
         {
 
             // Agregar ha Traduccion
-            Variables.TranslateString += "\n   const \n";
+            VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "const \n";
 
             // Retornar Null
             return null;

@@ -50,7 +50,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     AuxiliaryObject = Expression.Execute(Env);
 
                     // Obtener Valor Y Agregarlo A Consola
-                    Variables.ExecuteString += AuxiliaryObject.Value.ToString();
+                    VariablesMethods.ExecuteString += AuxiliaryObject.Value.ToString();
                 
                 }
 
@@ -59,7 +59,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 {
 
                     // Agregar Salto 
-                    Variables.ExecuteString += "\n";
+                    VariablesMethods.ExecuteString += "\n";
                 
                 }
             
@@ -72,7 +72,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 {
 
                     // Agregar Salto 
-                    Variables.ExecuteString += "\n";
+                    VariablesMethods.ExecuteString += "\n";
 
                 }
 
@@ -101,14 +101,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 {
 
                     // Agregar Salto 
-                    Variables.TranslateString += "\n    writeln(";
+                    VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "writeln(";
 
                 }
                 else 
                 {
 
                     // Agregar Salto 
-                    Variables.TranslateString += "\n    write(";
+                    VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "write(";
 
                 }
 
@@ -123,7 +123,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Coma 
-                        Variables.TranslateString += ", ";
+                        VariablesMethods.TranslateString += ", ";
 
                     }
 
@@ -133,7 +133,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                 }
 
                 // Agregar Otro Parentesis
-                Variables.TranslateString += ");\n";
+                VariablesMethods.TranslateString += ");\n";
 
             }
             else
@@ -148,14 +148,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Traduccion
-                        Variables.TranslateString += "\n    writeln();\n";
+                        VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "writeln();\n";
 
                     }
                     else 
                     {
 
                         // Agregar Traduccion
-                        Variables.TranslateString += "\n    writeln;\n";
+                        VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "writeln;\n";
 
                     }
 
@@ -168,14 +168,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Agregar Traduccion
-                        Variables.TranslateString += "\n    write();\n";
+                        VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "write();\n";
 
                     }
                     else
                     {
 
                         // Agregar Traduccion
-                        Variables.TranslateString += "\n    write;\n";
+                        VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "write;\n";
 
                     }
 

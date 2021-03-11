@@ -78,14 +78,14 @@ namespace Proyecto1.TranslatorAndInterpreter
             {
 
                 // Agregar Traduccion 
-                Variables.TranslateString += this.Value.ToString();
+                VariablesMethods.TranslateString += this.Value.ToString();
 
             }
             else 
             {
 
                 // Agregar Traduccion 
-                Variables.TranslateString += "'" + this.Value.ToString() + "'";
+                VariablesMethods.TranslateString += "'" + this.Value.ToString() + "'";
 
             }
 
