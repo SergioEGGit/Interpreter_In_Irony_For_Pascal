@@ -37,8 +37,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 foreach(AbstractInstruccion Instruccion in this.IntruccionsList) 
                 {
 
-                    // Ejecutar Instrucciones 
-                    Instruccion.Execute(MainEnv);
+                    // Verificar Si Esta Nullo
+                    if (Instruccion != null) 
+                    {
+
+                        // Ejecutar Instrucciones 
+                        Instruccion.Execute(MainEnv);
+
+                    }
                 
                 }
             
@@ -69,8 +75,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 foreach (AbstractInstruccion Instruccion in this.IntruccionsList)
                 {
 
-                    // Traducir 
-                    Instruccion.Translate(MainEnv);
+                    // Verificar SI No Es Nullo
+                    if (Instruccion != null) 
+                    {
+
+                        // Traducir 
+                        Instruccion.Translate(MainEnv);
+
+                    }
 
                 }
 

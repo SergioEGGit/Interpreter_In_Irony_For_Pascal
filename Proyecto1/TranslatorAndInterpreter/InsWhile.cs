@@ -62,12 +62,19 @@ namespace Proyecto1.TranslatorAndInterpreter
                         foreach(AbstractInstruccion Instruccion in this.InstruccionsList)
                         {
 
-                            // Ejecutar Instruccion 
-                            Instruccion.Execute(WhileEnv);
+                            // Verificar Si Es Nullo
+                            if (Instruccion != null) {
 
+                                // Ejecutar Instruccion
+                                Instruccion.Execute(WhileEnv);
+
+                            }
+                        
                         }
                         
                     }
+
+                    WhileExp = this.Expression_.Execute(WhileEnv);
                    
                 }
 
@@ -118,8 +125,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 foreach (AbstractInstruccion Instruccion in this.InstruccionsList)
                 {
 
-                    // Ejecutar Instruccion 
-                    Instruccion.Translate(WhileEnv);
+                    // verificar Si Es Nullo
+                    if (Instruccion != null) 
+                    {
+
+                        // Ejecutar Instruccion 
+                        Instruccion.Translate(WhileEnv);
+
+                    }
 
                 }
 

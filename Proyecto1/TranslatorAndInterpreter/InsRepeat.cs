@@ -62,13 +62,22 @@ namespace Proyecto1.TranslatorAndInterpreter
                         foreach (AbstractInstruccion Instruccion in this.InstruccionsList)
                         {
 
-                            // Ejecutar Instruccion 
-                            Instruccion.Execute(RepeatEnv);
+                            // Verificar Si ESta Nullo
+                            if (Instruccion != null) 
+                            {
+
+                                // Ejecutar Instruccion 
+                                Instruccion.Execute(RepeatEnv);
+
+                            }
 
                         }
 
                     }
-                    break;
+
+                    // Ejecutar Expression
+                    RepeatExp = this.Expression_.Execute(RepeatEnv);
+
                 } while (bool.Parse(RepeatExp.Value.ToString()));
 
             }
@@ -112,8 +121,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 foreach (AbstractInstruccion Instruccion in this.InstruccionsList)
                 {
 
-                    // Ejecutar Instruccion 
-                    Instruccion.Translate(RepeatEnv);
+                    // Verificar Si ESta Nullo
+                    if (Instruccion != null) 
+                    {
+
+                        // Ejecutar Instruccion 
+                        Instruccion.Translate(RepeatEnv);
+
+                    }
 
                 }
 
@@ -135,8 +150,14 @@ namespace Proyecto1.TranslatorAndInterpreter
             // Agregar A Traduccion
             VariablesMethods.TranslateString += VariablesMethods.Ident() + "until ";
 
-            // Obtener Traduccion De Expressiones 
-            this.Expression_.Translate(RepeatEnv);
+            // Verificar Si ES Nullo 
+            if (Expression_ != null) 
+            {
+
+                // Obtener Traduccion De Expressiones 
+                this.Expression_.Translate(RepeatEnv);
+
+            }
 
             // Agregar Traduccion
             VariablesMethods.TranslateString += ";\n";

@@ -19,7 +19,6 @@ namespace Proyecto1.Irony_Resources
         // Analizador Sintactico 
 
         // Inicio 
-
         public void Begin(ParseTreeNode RootNode)
         {
 
@@ -129,7 +128,7 @@ namespace Proyecto1.Irony_Resources
         // Declaracion De Variables 
         public void VariablesDeclaration(ParseTreeNode ActualNode)
         {
-
+            
             // Verificar Camino A Seguir
             if(ActualNode.ChildNodes.Count == 2) 
             {
@@ -137,14 +136,8 @@ namespace Proyecto1.Irony_Resources
                 // Agregar Clase Declaracion De Variables 
                 VariablesMethods.TranslateList.AddLast(new VariablesDeclaration());
 
-                // Agregar A Pila
-                VariablesMethods.AuxiliaryPile.Push("_");
-
                 // Bloque Declaracion
                 VariablesDeclarationBlock(ActualNode.ChildNodes[1]);
-
-                // Pop A Pila
-                VariablesMethods.AuxiliaryPile.Pop();
 
             }
 
@@ -447,6 +440,13 @@ namespace Proyecto1.Irony_Resources
 
                 // Instruccion For
                 return InsFor(ActualNode.ChildNodes[0]);
+
+            }
+            else if (ActualNode.ChildNodes[0].ToString().Equals("VariablesAsignation"))
+            {
+
+                // Instruccion For
+                return VariablesAsignation(ActualNode.ChildNodes[0]);
 
             }
 
@@ -752,9 +752,22 @@ namespace Proyecto1.Irony_Resources
 
             // Verificar Camino A Seguir
             if(ActualNode.ChildNodes.Count == 9) 
-            { 
-            
-                      
+            {
+
+                // Obtener Identificador 
+                String Identifier = SplitMethod(ActualNode.ChildNodes[1].ToString(), "Default");
+
+                // Obtener Primera Expression
+                AbstractExpression Expression_ = Expression(ActualNode.ChildNodes[4]);
+
+                // Obtener Segunda Expression
+                AbstractExpression Expression__ = Expression(ActualNode.ChildNodes[6]);
+
+                // Obtener Lista De Instruccions
+                LinkedList<AbstractInstruccion> AuxiliaryList = ForBlock(ActualNode.ChildNodes[8]);
+
+                // Retornar Instruccion
+                return new InsFor(Identifier, Expression_, Expression__, AuxiliaryList, ActualNode.ChildNodes[0].Token.Location.Line, ActualNode.ChildNodes[0].Token.Location.Column);
             
             }
 
@@ -763,7 +776,7 @@ namespace Proyecto1.Irony_Resources
         
         }
 
-        // Bloque Repeat
+        // Bloque For
         public LinkedList<AbstractInstruccion> ForBlock(ParseTreeNode ActualNode)
         {
 
@@ -784,6 +797,31 @@ namespace Proyecto1.Irony_Resources
             // Retornar 
             return null;
 
+        }
+
+        // Asignacion De Varaibles 
+        public AbstractInstruccion VariablesAsignation(ParseTreeNode ActualNode) 
+        {
+
+            // Verificar Camino A Seguir
+            if(ActualNode.ChildNodes.Count == 5) 
+            {
+
+                // Obtener String
+                String Identifier = SplitMethod(ActualNode.ChildNodes[0].ToString(), "Default");
+
+                // Expression
+                AbstractExpression Expression_ = Expression(ActualNode.ChildNodes[3]);
+
+                // Retorno Instruccion 
+                return new VariablesAsignation(Identifier, Expression_, ActualNode.ChildNodes[0].Token.Location.Line, ActualNode.ChildNodes[0].Token.Location.Column);
+
+
+            }
+
+            // Retornar Null
+            return null;        
+        
         }
 
         // Expresion
@@ -961,8 +999,21 @@ namespace Proyecto1.Irony_Resources
         public AbstractExpression VariablesValues(ParseTreeNode ActualNode)
         {
             
-            // Retornar Valor Expression
-            return new PrimitiveValue(SplitMethod(ActualNode.ChildNodes[0].ToString(), "Value"));
+            /// Veriricar Si Es Un Identificaodr 
+            if (ActualNode.ChildNodes[0].ToString().Contains("Identifier"))
+            {
+
+                // Retornar Valor Expression
+                return new PrimitiveValue(SplitMethod(ActualNode.ChildNodes[0].ToString(), "Value"), "Identifier");
+
+            }
+            else 
+            {
+
+                // Retornar Valor Expression
+                return new PrimitiveValue(SplitMethod(ActualNode.ChildNodes[0].ToString(), "Value"), "String");
+
+            }
 
         }
         

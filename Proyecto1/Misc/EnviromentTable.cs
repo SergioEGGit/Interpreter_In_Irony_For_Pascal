@@ -54,6 +54,63 @@ namespace Proyecto1.Misc
             
         }
 
+        // Obtener Variable De Tabla De Simbolos
+        public SymbolTable GetVariable(String VarName) 
+        {
+
+            // Obtener Entorno Actual
+            EnviromentTable ActualEnv = this;
+
+            // Recorrer Entornos
+            while(ActualEnv != null) 
+            {
+
+                // Buscar Variable 
+                if(ActualEnv.PrimitiveVariables.ContainsKey(VarName.ToLower())) 
+                {
+
+                    // Retornar Variable 
+                    return ActualEnv.PrimitiveVariables[VarName.ToLower()];
+                
+                }
+
+                // Avanzar Puntero
+                ActualEnv = ActualEnv.ParentEnviroment;
+            
+            }
+
+            // Retornar Null
+            return null;
+        
+        }
+
+        // Setear Variable De Tabla De Simbolos
+        public void SetVariable(String VarName, SymbolTable ActualVar) 
+        {
+
+            // Obtener Entorno Actual
+            EnviromentTable ActualEnv = this;
+
+            // Recorrer Entornos
+            while(ActualEnv != null) 
+            {
+
+                // Buscar Variable 
+                if(ActualEnv.PrimitiveVariables.ContainsKey(VarName.ToLower())) 
+                {
+
+                    // Agregar Variable 
+                    ActualEnv.PrimitiveVariables[VarName.ToLower()] = ActualVar;
+                
+                }
+
+                // Avanzar Puntero
+                ActualEnv = ActualEnv.ParentEnviroment;
+            
+            }
+        
+        }
+
         // Graficar Tabla De Simbolos
         public LinkedList<EnviromentTable> GraphSymbolTable() 
         {

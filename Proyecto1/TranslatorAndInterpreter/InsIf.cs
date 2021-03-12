@@ -64,8 +64,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                         foreach(AbstractInstruccion Instruccion in this.InstruccionsList)
                         {
 
-                            // Ejecutar Instruccion 
-                            Instruccion.Execute(IfEnv);
+                            // Verificar Si Es Nulloo
+                            if (Instruccion != null) 
+                            {
+
+                                // Ejecutar Instruccion 
+                                Instruccion.Execute(IfEnv);
+
+                            }
 
                         }
 
@@ -75,8 +81,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 else 
                 {
 
-                    // Ejectar Instruccion Else 
-                    this.InsElse.Execute(Env);
+                    // Verificar Si ESta Nullo
+                    if (InsElse != null)
+                    { 
+
+                        // Ejectar Instruccion Else 
+                        this.InsElse.Execute(Env);
+
+                    }
                 
                 }
 
@@ -127,8 +139,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 foreach (AbstractInstruccion Instruccion in this.InstruccionsList)
                 {
 
-                    // Ejecutar Instruccion 
-                    Instruccion.Translate(IfEnv);
+                    // Verificar Si ESta Nulla
+                    if(Instruccion != null) 
+                    {
+
+                        // Ejecutar Instruccion 
+                        Instruccion.Translate(IfEnv);
+
+                    }
 
                 }
 
@@ -146,9 +164,15 @@ namespace Proyecto1.TranslatorAndInterpreter
             
             // Agregar A Traduccion
             VariablesMethods.TranslateString += "\n" + VariablesMethods.Ident() + "end";
-            
-            // Metodo Traducir Else 
-            this.InsElse.Translate(Env);
+
+            // Veridicar Si ESt a Nulla
+            if (InsElse != null) 
+            {
+
+                // Metodo Traducir Else 
+                this.InsElse.Translate(Env);
+
+            }
 
             // Retornar 
             return null;

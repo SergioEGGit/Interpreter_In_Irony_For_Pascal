@@ -49,8 +49,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                     // Obtener Valor
                     AuxiliaryObject = Expression.Execute(Env);
 
-                    // Obtener Valor Y Agregarlo A Consola
-                    VariablesMethods.ExecuteString += AuxiliaryObject.Value.ToString();
+                    // Verificar Que No SEa Nullo
+                    if(Expression != null) 
+                    {
+
+                        // Obtener Valor Y Agregarlo A Consola
+                        VariablesMethods.ExecuteString += AuxiliaryObject.Value.ToString();
+
+                    }
                 
                 }
 
@@ -116,8 +122,14 @@ namespace Proyecto1.TranslatorAndInterpreter
                 foreach (AbstractExpression Expression in ExpressionList)
                 {
 
-                    // Obtener Valor
-                    AuxiliaryObject = Expression.Translate(Env);
+                    // Verificar Que no SEa Nullo
+                    if(Expression != null) 
+                    {
+
+                        // Obtener Valor
+                        AuxiliaryObject = Expression.Translate(Env);
+
+                    }
 
                     if (AuxiliaryCounter < ExpressionList.Count) 
                     {

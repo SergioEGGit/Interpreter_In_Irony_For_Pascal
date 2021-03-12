@@ -89,7 +89,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     foreach (String Identifier in Identifiers)
                     {
 
-                        if (this.Value == null && this.Identifiers.Length > 1)
+                        if (this.Value == null && this.Identifiers.Length > 0)
                         {
 
                             // Variable Auxiliar 

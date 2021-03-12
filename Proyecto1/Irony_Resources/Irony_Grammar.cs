@@ -57,8 +57,6 @@ namespace Proyecto1.Irony_Resources
 
                 BnfTerm BooleanType = ToTerm("boolean");
 
-                BnfTerm VoidType = ToTerm("void");
-
                 BnfTerm ObjectType = ToTerm("object");
 
                 BnfTerm ArrayType = ToTerm("array");
@@ -78,10 +76,6 @@ namespace Proyecto1.Irony_Resources
                 BnfTerm ReservedOf = ToTerm("of");
 
                 BnfTerm ReservedConst = ToTerm("const");
-
-                BnfTerm ReservedTrue = ToTerm("true");
-
-                BnfTerm ReservedFalse = ToTerm("false");
 
                 BnfTerm ReservedIf = ToTerm("if");
 
@@ -112,10 +106,6 @@ namespace Proyecto1.Irony_Resources
                 BnfTerm ReservedProcedure = ToTerm("procedure");
 
                 BnfTerm ReservedExit = ToTerm("exit");
-
-                //BnfTerm ReservedWrite = ToTerm("write");
-
-                //BnfTerm ReservedWriteLine = ToTerm("writeline");
 
                 BnfTerm ReservedGraficar = ToTerm("graficar_ts");
 
@@ -214,8 +204,6 @@ namespace Proyecto1.Irony_Resources
 
                 NonTerminal Constants = new NonTerminal("Constants");
 
-                NonTerminal ConstantsValues = new NonTerminal("ConstantsValues");
-
                 // Asignacion De Variables 
                 NonTerminal VariablesAsignation = new NonTerminal("VariablesAsignation");
 
@@ -224,20 +212,11 @@ namespace Proyecto1.Irony_Resources
 
                 // Misc 
 
-                // Valores Boolean
-                //NonTerminal SimpleBoolean = new NonTerminal("SimpleBoolean");
-
                 // Expresiones 
                 NonTerminal Expression = new NonTerminal("Expression");
 
                 // Instruccion If 
                 NonTerminal InsIf = new NonTerminal("InsIf");
-
-                // Instrucciones If 
-                NonTerminal InstruccionsIfCasLo = new NonTerminal("InstruccionsIfCasLo");
-
-                // Instruccion If 
-                NonTerminal InstruccionIfCasLo = new NonTerminal("InstruccionIfCasLo");
 
                 // Bloque If 
                 NonTerminal IfBlock = new NonTerminal("IfBlock");
@@ -315,10 +294,7 @@ namespace Proyecto1.Irony_Resources
                 NonTerminal ArraysObjects = new NonTerminal("ArraysOjects");
 
                 // Seleccionar Tipo type 
-                NonTerminal TypeOfTypes = new NonTerminal("TypeOfTypes");
-
-                // Comentarios
-                //NonTerminal Comments = new NonTerminal("Comentarios");    
+                NonTerminal TypeOfTypes = new NonTerminal("TypeOfTypes");  
 
             #endregion
 
@@ -526,7 +502,7 @@ namespace Proyecto1.Irony_Resources
 
                 // Instruccion 
                 Instruccion.Rule                    = InsWrite
-                                                    //| VariablesAsignation
+                                                    | VariablesAsignation
                                                     | InsIf
                                                     //| InsCase
                                                     | InsWhile
@@ -623,6 +599,13 @@ namespace Proyecto1.Irony_Resources
                                                     | SyntaxError + ReservedEnd
                                                     ;
 
+                // Asignacion De Variables 
+                VariablesAsignation.Rule            = SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
+                                                    //| SimpleIdentifier + SymbolPoint + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
+                                                    //| SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket + SymbolSemiColon
+                                                    //| SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                    //| SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
+                                                    ;
                 // Expresiones 
                 Expression.Rule                     = SymbolLeftParenthesis + Expression + SymbolRightParenthesis
                                                     | Expression + OperatorPlus + Expression
@@ -659,12 +642,6 @@ namespace Proyecto1.Irony_Resources
                                                     | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis
                                                     | SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket
                                                     */;
-
-                // Instruccion Comentarios 
-                //Comments.Rule               = OneLineComment
-                //                            | MultiLineComment1
-                //                            | MultiLineComment2
-                //                            ;
 
             #endregion
 

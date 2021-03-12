@@ -1,5 +1,6 @@
 ﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
 using System;
+using System.Windows.Forms;
 using Proyecto1.Misc;
 
 // ------------------------------------------------ Namespace -------------------------------------------------------
@@ -10,14 +11,20 @@ namespace Proyecto1.TranslatorAndInterpreter
     class PrimitiveValue : AbstractExpression
     {
 
+        // Atributos
+
+        // Type 
+        private readonly String StringType;
+
         // Valor 
         private readonly object Value;
 
         // Constructor 
-        public PrimitiveValue(object Value) {
+        public PrimitiveValue(object Value, String StringType) {
 
             // Inicicalizar Valores  
             this.Value = Value;
+            this.StringType = StringType;
         
         }
 
@@ -27,7 +34,7 @@ namespace Proyecto1.TranslatorAndInterpreter
 
             // Objecto A Retornar
             ObjectReturn AuxiliaryReturn;
-
+            MessageBox.Show(this.Value.ToString());
             // Verificar Que Tipo De Valor Primtivo ES 
             if(int.TryParse(this.Value.ToString(), out int AuxiliaryValueI))
             {
@@ -60,8 +67,39 @@ namespace Proyecto1.TranslatorAndInterpreter
             else
             {
 
-                // Agregar A Objecto Valor
-                AuxiliaryReturn = new ObjectReturn(this.Value.ToString(), "string");
+                // Verificar Tipo
+                if(this.StringType.Equals("Identifier")) 
+                {
+
+                    // Buscar Variable 
+                    SymbolTable ActualVar = Env.GetVariable(this.Value.ToString());
+
+                    // Obtener Variable 
+                    if(ActualVar != null) 
+                    {
+
+                        ObjectReturn ActualValue = (ObjectReturn) ActualVar.Value;
+
+                        // Retornar Objecto 
+                        AuxiliaryReturn = new ObjectReturn(ActualValue.Value, ActualVar.Type);
+
+                    }   
+                    else
+                    {
+
+                        // Retornar Objecto 
+                        AuxiliaryReturn = null;
+
+                    }
+
+                }
+                else 
+                {
+
+                    // Agregar A Objecto Valor
+                    AuxiliaryReturn = new ObjectReturn(this.Value.ToString(), "string");
+
+                }
 
             }
 
@@ -74,7 +112,7 @@ namespace Proyecto1.TranslatorAndInterpreter
         {
 
             // Verificar Si Es Integer, Real O Boolean
-            if (int.TryParse(this.Value.ToString(), out int Value) || Decimal.TryParse(this.Value.ToString(), out Decimal Value_) || this.Value.ToString().ToLower().Equals("true") || this.Value.ToString().ToLower().Equals("false"))
+            if (int.TryParse(this.Value.ToString(), out int Value) || Decimal.TryParse(this.Value.ToString(), out Decimal Value_) || this.Value.ToString().ToLower().Equals("true") || this.Value.ToString().ToLower().Equals("false") || this.StringType.Equals("Identifier"))
             {
 
                 // Agregar Traduccion 
