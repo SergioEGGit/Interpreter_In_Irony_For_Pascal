@@ -1,6 +1,7 @@
 ﻿// ------------------------------------------ Librerias E Imports ---------------------------------------------------
 using System.Collections.Generic;
 using System;
+using Proyecto1.TranslatorAndInterpreter;
 
 // ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.Misc
@@ -18,6 +19,9 @@ namespace Proyecto1.Misc
         // Lista De Variables Primitivas
         public Dictionary<String, SymbolTable> PrimitiveVariables;
 
+        // Lista De Funcions 
+        public Dictionary<String, FunctionTable> Functions; 
+
         // Nombre Del Ambiente Actual
         public String EnviromentName;
 
@@ -28,6 +32,7 @@ namespace Proyecto1.Misc
             // Inicializar Valores 
             this.ParentEnviroment = ParentEnviroment;
             this.PrimitiveVariables = new Dictionary<String, SymbolTable>();
+            this.Functions = new Dictionary<String, FunctionTable>();
             this.EnviromentName = EnviromentName;
 
             // Agregar Entorno A Lista 
@@ -38,19 +43,42 @@ namespace Proyecto1.Misc
         // Agregar Variable A Tabla De Simbolos
         public bool AddVariable(String Identifier, String Type, object Value, String DecType, String Env, int Line, int Column) {
 
+            // Variables
+            bool Variables = true;
+            bool Functions = true;
+
             // Verificar si La Variable Existe En El Ambito
-            if(this.PrimitiveVariables.ContainsKey(Identifier.ToLower())) {
+            if (this.PrimitiveVariables.ContainsKey(Identifier.ToLower()))
+            {
 
                 // Ya Existe 
-                return false;
+                Variables = false;
 
             }
 
-            // Agregar Variable A Lista De Simbolos
-            this.PrimitiveVariables.Add(Identifier.ToLower(), new SymbolTable(Identifier, Type, Value, DecType, Env, Line, Column));
+            // Verificar si La Funcion Existe En El Ambito
+            if (this.Functions.ContainsKey(Identifier.ToLower()))
+            {
+
+                // Ya Existe 
+                Functions = false;
+
+            }
+
+            // Verificar 
+            if(Variables && Functions)
+            {
+
+                // Agregar Variable A Lista De Simbolos
+                this.PrimitiveVariables.Add(Identifier.ToLower(), new SymbolTable(Identifier, Type, Value, DecType, Env, Line, Column));
+
+                // Agregada Con Exito
+                return true;
             
-            // Agregada Con Exito
-            return true;
+            }
+
+            // return false
+            return false;
             
         }
 
@@ -109,6 +137,140 @@ namespace Proyecto1.Misc
             
             }
         
+        }
+
+        // Añadir Funcion
+        public bool AddFunction(String FuncType, String Identifier, String ReturnType, LinkedList<ObjectReturn> ParamsList, LinkedList<AbstractInstruccion> DeclarationsList, LinkedList<AbstractInstruccion> InstruccionsList, String EnvName, int TokenLine, int TokenColumn, EnviromentTable Env) 
+        {
+
+            // Variables
+            bool Variables = true;
+            bool Functions = true;
+            
+            // Verificar si La Variable Existe En El Ambito
+            if(this.PrimitiveVariables.ContainsKey(Identifier.ToLower()))
+            {
+               
+                // Ya Existe 
+                Variables = false;
+
+            }
+
+            // Verificar si La Funcion Existe En El Ambito
+            if(this.Functions.ContainsKey(Identifier.ToLower()))
+            {
+               
+                // Ya Existe 
+                Functions = false;
+
+            }
+
+            // Verificar 
+            if (Variables && Functions)
+            {
+
+                // Agregar Variable A Lista De Simbolos
+                this.Functions.Add(Identifier.ToLower(), new FunctionTable(FuncType, Identifier, ReturnType, ParamsList, DeclarationsList, InstruccionsList, EnvName, TokenLine, TokenColumn, Env));
+
+                // Agregada Con Exito
+                return true;
+
+            }
+
+            // Retornar 
+            return false;
+
+        }
+
+        // Obtener Variable De Tabla De Simbolos
+        public FunctionTable GetFunction(String FuncName)
+        {
+
+            // Obtener Entorno Actual
+            EnviromentTable ActualEnv = this;
+
+            // Recorrer Entornos
+            while (ActualEnv != null)
+            {
+
+                // Buscar Variable 
+                if (ActualEnv.Functions.ContainsKey(FuncName.ToLower()))
+                {
+
+                    // Retornar Variable 
+                    return ActualEnv.Functions[FuncName.ToLower()];
+
+                }
+
+                // Avanzar Puntero
+                ActualEnv = ActualEnv.ParentEnviroment;
+
+            }
+
+            // Retornar Null
+            return null;
+
+        }
+
+        // Buscar Ciclos 
+        public bool SearchCycles() 
+        {
+
+            // Obtener Entorno Actual
+            EnviromentTable ActualEnv = this;
+
+            // Recorrer Entornos
+            while (ActualEnv != null)
+            {
+
+                // Verificar Si COntiene Nombre De Ciclos 
+                if (ActualEnv.EnviromentName.Contains("While") || ActualEnv.EnviromentName.Contains("Repeat") || ActualEnv.EnviromentName.Contains("For")) 
+                {
+
+                    // Retornar 
+                    return true;
+                
+                }
+
+
+                // Avanzar Puntero
+                ActualEnv = ActualEnv.ParentEnviroment;
+
+            }
+
+            // Retornar Null
+            return false;
+
+        }
+
+        // Buscar Ciclos 
+        public bool SearchFuncs()
+        {
+
+            // Obtener Entorno Actual
+            EnviromentTable ActualEnv = this;
+
+            // Recorrer Entornos
+            while (ActualEnv != null)
+            {
+
+                // Verificar Si COntiene Nombre De Ciclos 
+                if (ActualEnv.EnviromentName.Contains("Func"))
+                {
+
+                    // Retornar 
+                    return true;
+
+                }
+
+                // Avanzar Puntero
+                ActualEnv = ActualEnv.ParentEnviroment;
+
+            }
+
+            // Retornar Null
+            return false;
+
         }
 
         // Graficar Tabla De Simbolos

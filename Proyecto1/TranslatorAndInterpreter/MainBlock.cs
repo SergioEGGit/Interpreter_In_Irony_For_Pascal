@@ -14,12 +14,20 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Lista De Instrucciones
         private readonly LinkedList<AbstractInstruccion> IntruccionsList = new LinkedList<AbstractInstruccion>();
 
+        // TOken LIne 
+        private readonly int TokenLine;
+
+        // Token Column
+        private readonly int TokenColumn;
+
         // Constructor 
-        public MainBlock(LinkedList<AbstractInstruccion> InstruccionsList) 
+        public MainBlock(LinkedList<AbstractInstruccion> InstruccionsList, int TokenLine, int TokenColumn) 
         {
 
             // Inicializar Valores 
             this.IntruccionsList = InstruccionsList;
+            this.TokenLine = TokenLine;
+            this.TokenColumn = TokenColumn;
         
         }
 
@@ -42,14 +50,48 @@ namespace Proyecto1.TranslatorAndInterpreter
                     {
 
                         // Ejecutar Instrucciones 
-                        Instruccion.Execute(MainEnv);
+                        ObjectReturn ObjectTransfer = (ObjectReturn) Instruccion.Execute(MainEnv);
+
+                        // VErificar Si ETSa Nullo 
+                        if (ObjectTransfer != null) 
+                        {
+
+                            // Verificar TIpo
+                            if (ObjectTransfer.Option.Equals("break") || ObjectTransfer.Option.Equals("continue"))
+                            {
+
+                                // Agregar Error 
+                                VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Break O Continue Deben De Aparecer Dentro De Un CIclo", this.TokenLine, this.TokenColumn));
+
+                                // Aumentar Contador
+                                VariablesMethods.AuxiliaryCounter += 1;
+
+                            }
+                            else
+                            {
+
+                                // Verificar SI Es Llamada A Funcion 
+                                if(!ObjectTransfer.End.Equals("FunctionCall")) 
+                                {
+
+                                    // Agregar Error 
+                                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Exit Deben De Aparecer Dentro De Una Funcion", this.TokenLine, this.TokenColumn));
+
+                                    // Aumentar Contador
+                                    VariablesMethods.AuxiliaryCounter += 1;
+
+                                }
+
+                            }
+
+                        }
 
                     }
                 
                 }
             
             }
-
+           
             // Retornar 
             return null;
 

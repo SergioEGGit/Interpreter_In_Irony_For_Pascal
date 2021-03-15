@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Proyecto1.Misc;
+using System.Windows.Forms;
 
 // ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.TranslatorAndInterpreter
@@ -47,33 +48,64 @@ namespace Proyecto1.TranslatorAndInterpreter
             // Simbolo
             SymbolTable ActualVar = Env.GetVariable(this.Identifier);
 
+            // Function 
+            FunctionTable ActualFunc = Env.GetFunction(this.Identifier);
+
             // Value Auxiliar 
             ObjectReturn ActualValue = new ObjectReturn("", "");
 
             // Buscar Variable 
-            if(ActualVar != null && AsgExp != null)
+            if(AsgExp != null)
             {
 
-                // Verificar Si Ambas Condiciones Son Integers
-                if(ActualVar.Type.Equals(AsgExp.Type))
+                // Verificar Si Es Funcion 
+                if (ActualFunc != null && ActualVar == null)
                 {
 
                     // Obtener Valores 
-                    ActualValue.Type = ActualVar.Type;
+                    ActualValue.Type = AsgExp.Type;
                     ActualValue.Value = AsgExp.Value;
+                    ActualValue.Option = "return";
 
-                    // Agregar A Variable 
-                    ActualVar.Value = ActualValue;
+                    // Retornar Expression 
+                    return ActualValue;
 
-                    // Setear Variable 
-                    Env.SetVariable(this.Identifier, ActualVar);
-                   
+                }
+                else if (ActualFunc == null && ActualVar != null)
+                {
+
+                    // Verificar Si Ambas Condiciones Son Integers
+                    if (ActualVar.Type.Equals(AsgExp.Type))
+                    {
+
+                        // Obtener Valores 
+                        ActualValue.Type = ActualVar.Type;
+                        ActualValue.Value = AsgExp.Value;
+
+                        // Agregar A Variable 
+                        ActualVar.Value = ActualValue;
+
+                        // Setear Variable 
+                        Env.SetVariable(this.Identifier, ActualVar);
+
+                    }
+                    else
+                    {
+
+                        // Agregar Error 
+                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "Los Tipos De Dato No Coinciden", this.TokenLine, this.TokenColumn));
+
+                        // Aumentar Contador
+                        VariablesMethods.AuxiliaryCounter += 1;
+
+                    }
+
                 }
                 else
                 {
 
                     // Agregar Error 
-                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "Los Tipos De Dato No Coinciden", this.TokenLine, this.TokenColumn));
+                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Variable O Funcion Indica No Existe En El Contexto Actual", this.TokenLine, this.TokenColumn));
 
                     // Aumentar Contador
                     VariablesMethods.AuxiliaryCounter += 1;
@@ -85,13 +117,13 @@ namespace Proyecto1.TranslatorAndInterpreter
             {
 
                 // Agregar Error 
-                VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Variable Indicada No Existe En El Contexto Actual", this.TokenLine, this.TokenColumn));
+                VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Expression Indicada Es Incorrecta", this.TokenLine, this.TokenColumn));
 
                 // Aumentar Contador
                 VariablesMethods.AuxiliaryCounter += 1;
 
             }
-
+            
             // Retornar
             return null;
 

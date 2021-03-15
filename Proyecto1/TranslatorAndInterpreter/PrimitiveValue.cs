@@ -34,7 +34,7 @@ namespace Proyecto1.TranslatorAndInterpreter
 
             // Objecto A Retornar
             ObjectReturn AuxiliaryReturn;
-            MessageBox.Show(this.Value.ToString());
+            
             // Verificar Que Tipo De Valor Primtivo ES 
             if(int.TryParse(this.Value.ToString(), out int AuxiliaryValueI))
             {

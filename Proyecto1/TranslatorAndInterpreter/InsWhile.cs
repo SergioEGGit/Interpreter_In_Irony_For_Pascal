@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Proyecto1.Misc;
+using System.Windows.Forms;
 
 // ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.TranslatorAndInterpreter
@@ -47,35 +48,100 @@ namespace Proyecto1.TranslatorAndInterpreter
             // Verificar La Expression
             ObjectReturn WhileExp = this.Expression_.Execute(WhileEnv);
 
-            // Verificar Si Hay Error Semantico 
-            if (WhileExp.Type.Equals("boolean"))
+            if(WhileExp != null) 
             {
 
-                while(bool.Parse(WhileExp.Value.ToString()))
+                // Verificar Si Hay Error Semantico 
+                if (WhileExp.Type.Equals("boolean"))
                 {
 
-                    // Verificar Si Hay Instrucciones 
-                    if(this.InstruccionsList != null)
+                    while (bool.Parse(WhileExp.Value.ToString()))
                     {
 
-                        // Recorrer Lista De Instrucciones 
-                        foreach(AbstractInstruccion Instruccion in this.InstruccionsList)
+                        // Verificar Si Hay Instrucciones 
+                        if (this.InstruccionsList != null)
                         {
 
-                            // Verificar Si Es Nullo
-                            if (Instruccion != null) {
+                            // Recorrer Lista De Instrucciones 
+                            foreach (AbstractInstruccion Instruccion in this.InstruccionsList)
+                            {
 
-                                // Ejecutar Instruccion
-                                Instruccion.Execute(WhileEnv);
+                                // Verificar Si Es Nullo
+                                if (Instruccion != null)
+                                {
+
+                                    // Ejecutar Instruccion
+                                    ObjectReturn ObjectTransfer = (ObjectReturn)Instruccion.Execute(WhileEnv);
+
+                                    // Verificar SI ESta Nullo
+                                    if (ObjectTransfer != null)
+                                    {
+
+                                        // Verificar Si ES Break
+                                        if (ObjectTransfer.Option.Equals("break"))
+                                        {
+
+                                            // Retrun Null
+                                            return null;
+
+                                        }
+                                        else if (ObjectTransfer.Option.Equals("continue"))
+                                        {
+                                            
+                                            // Continuar 
+                                            break;
+
+                                        }
+                                        else
+                                        {
+
+                                            // Verificar Si Hay Ciclos 
+                                            bool Flag = WhileEnv.SearchFuncs();
+
+                                            // Verificar 
+                                            if (Flag)
+                                            {
+
+                                                // Retornar Valor 
+                                                return ObjectTransfer;
+
+                                            }
+                                            else
+                                            {
+
+                                                // Agregar Error 
+                                                VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Exit Tiene Que Aparecer Dentro De Una Funcion", this.TokenLine, this.TokenColumn));
+
+                                                // Aumentar Contador
+                                                VariablesMethods.AuxiliaryCounter += 1;
+
+                                            }
+
+
+                                        }
+
+                                    }
+
+                                }
 
                             }
-                        
+
                         }
-                        
+
+                        WhileExp = this.Expression_.Execute(WhileEnv);
+
                     }
 
-                    WhileExp = this.Expression_.Execute(WhileEnv);
-                   
+                }
+                else
+                {
+
+                    // Agregar Error 
+                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Expresion A Cumplie De Un While Tiene Que Ser De Tipo Boolean", this.TokenLine, this.TokenColumn));
+
+                    // Aumentar Contador
+                    VariablesMethods.AuxiliaryCounter += 1;
+
                 }
 
             }

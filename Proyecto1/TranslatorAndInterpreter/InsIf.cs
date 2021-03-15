@@ -69,8 +69,68 @@ namespace Proyecto1.TranslatorAndInterpreter
                             {
 
                                 // Ejecutar Instruccion 
-                                Instruccion.Execute(IfEnv);
+                                ObjectReturn ObjectTransfer = (ObjectReturn) Instruccion.Execute(IfEnv);
+                                
+                                // Verificar Si Se Retornar
+                                if(ObjectTransfer != null) 
+                                {
 
+                                    // Verificar TIpo 
+                                    if (ObjectTransfer.Option.Equals("return"))
+                                    {
+
+                                        // Verificar Si Hay Ciclos 
+                                        bool Flag = IfEnv.SearchFuncs();
+
+                                        // Verificar 
+                                        if (Flag)
+                                        {
+
+                                            // Retornar Valor 
+                                            return ObjectTransfer;
+
+                                        }
+                                        else
+                                        {
+
+                                            // Agregar Error 
+                                            VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Exit Tiene Que Aparecer Dentro De Una Funcion", this.TokenLine, this.TokenColumn));
+
+                                            // Aumentar Contador
+                                            VariablesMethods.AuxiliaryCounter += 1;
+
+                                        }
+
+                                    }
+                                    else
+                                    {
+
+                                        // Verificar Si Hay Ciclos 
+                                        bool Flag = IfEnv.SearchCycles();
+
+                                        // Verificar 
+                                        if (Flag)
+                                        {
+
+                                            // Retornar Valor 
+                                            return ObjectTransfer;
+
+                                        }
+                                        else
+                                        {
+
+                                            // Agregar Error 
+                                            VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Break O Continue Tiene Que Aparecer Dentro De Un Ciclo", this.TokenLine, this.TokenColumn));
+
+                                            // Aumentar Contador
+                                            VariablesMethods.AuxiliaryCounter += 1;
+
+                                        }
+
+                                    }                                    
+
+                                }
+                                 
                             }
 
                         }

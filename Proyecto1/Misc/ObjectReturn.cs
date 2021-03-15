@@ -17,7 +17,10 @@ namespace Proyecto1.TranslatorAndInterpreter
         public object Type;
 
         // Opcional
-        //public String Opcional;
+        public String Option;
+
+        // End
+        public String End;
 
         // Constructor 
         public ObjectReturn(object Value, object Type) {
@@ -25,9 +28,11 @@ namespace Proyecto1.TranslatorAndInterpreter
             // Inicializar Valroes 
             this.Value = Value;
             this.Type = Type;
+            this.Option = "";
+            this.End = "";
 
         }
-
+        
     }
 
 }

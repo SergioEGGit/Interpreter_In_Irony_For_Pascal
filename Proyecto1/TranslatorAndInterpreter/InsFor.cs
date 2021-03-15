@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Proyecto1.Misc;
+using System.Windows.Forms;
 
 // ------------------------------------------------ NameSpace -------------------------------------------------------
 namespace Proyecto1.TranslatorAndInterpreter
@@ -31,8 +32,11 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Token COlumn 
         public readonly int TokenColumn;
 
+        // Type For 
+        public readonly String TypeFor;
+
         // Constructor 
-        public InsFor(String Identifier, AbstractExpression Expression_, AbstractExpression Expression__, LinkedList<AbstractInstruccion> InstruccionsList, int TokenLine, int TokenColumn)
+        public InsFor(String Identifier, AbstractExpression Expression_, AbstractExpression Expression__, LinkedList<AbstractInstruccion> InstruccionsList, int TokenLine, int TokenColumn, String TypeFor)
         {
 
             // Inicializar Valores 
@@ -42,6 +46,7 @@ namespace Proyecto1.TranslatorAndInterpreter
             this.InstruccionsList = InstruccionsList;
             this.TokenLine = TokenLine;
             this.TokenColumn = TokenColumn;
+            this.TypeFor = TypeFor;
 
         }
 
@@ -71,39 +76,185 @@ namespace Proyecto1.TranslatorAndInterpreter
                 // Verificar Si Ambas Condiciones Son Integers
                 if(AsgExp.Type.Equals("integer") && LmExp.Type.Equals("integer") && ActualVar.Type.Equals("integer"))
                 {
-
-                    // For 
-                    for(int Count = int.Parse(AsgExp.Value.ToString()); Count <= int.Parse(LmExp.Value.ToString()); Count++)
+                    
+                    // Verificar TIpo De Foor 
+                    if (this.TypeFor.Equals("to"))
                     {
-                        
-                        // Setear Valores 
-                        ActualValue.Type = "integer";
-                        ActualValue.Value = Count;
 
-                        // Agregar A Tabla De Simbolos 
-                        ActualVar.Value = ActualValue;
-
-                        // Setear Nueva Variable 
-                        ForEnv.SetVariable(this.Identifier, ActualVar);
-
-                        // Verificar Si La Lista De Instrucciones ESta Nulla
-                        if (this.InstruccionsList != null) 
+                        // For 
+                        for (int Count = int.Parse(AsgExp.Value.ToString()); Count <= int.Parse(LmExp.Value.ToString()); Count++)
                         {
 
-                            // Recorrer Lista 
-                            foreach (AbstractInstruccion Instruccion in this.InstruccionsList) 
+                            // Setear Valores 
+                            ActualValue.Type = "integer";
+                            ActualValue.Value = Count;
+
+                            // Agregar A Tabla De Simbolos 
+                            ActualVar.Value = ActualValue;
+
+                            // Setear Nueva Variable 
+                            ForEnv.SetVariable(this.Identifier, ActualVar);
+
+                            // Verificar Si La Lista De Instrucciones ESta Nulla
+                            if (this.InstruccionsList != null)
                             {
 
-                                // Verificar Si NO Es Null
-                                if (Instruccion != null) 
+                                // Recorrer Lista 
+                                foreach (AbstractInstruccion Instruccion in this.InstruccionsList)
                                 {
 
-                                    Instruccion.Execute(ForEnv);
-                                
+                                    // Verificar Si NO Es Null
+                                    if (Instruccion != null)
+                                    {
+
+                                        // Obtener Objeto
+                                        ObjectReturn ObjectTransfer = (ObjectReturn)Instruccion.Execute(ForEnv);
+
+                                        // Verificar SI ESta Nullo
+                                        if (ObjectTransfer != null)
+                                        {
+
+                                            // Verificar Si ES Break
+                                            if (ObjectTransfer.Option.Equals("break"))
+                                            {
+
+                                                // Retrun Null
+                                                return null;
+
+                                            }
+                                            else if (ObjectTransfer.Option.Equals("continue"))
+                                            {
+
+                                                // Continuar 
+                                                break;
+
+                                            }
+                                            else
+                                            {
+
+                                                // Verificar Si Hay Ciclos 
+                                                bool Flag = ForEnv.SearchFuncs();
+
+                                                // Verificar 
+                                                if (Flag)
+                                                {
+
+                                                    // Retornar Valor 
+                                                    return ObjectTransfer;
+
+                                                }
+                                                else
+                                                {
+
+                                                    // Agregar Error 
+                                                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Exit Tiene Que Aparecer Dentro De Una Funcion", this.TokenLine, this.TokenColumn));
+
+                                                    // Aumentar Contador
+                                                    VariablesMethods.AuxiliaryCounter += 1;
+
+
+                                                }
+
+                                            }
+
+                                        }
+
+                                    }
+
                                 }
-                            
+
                             }
-                        
+
+                        }
+
+                    }
+                    else
+                    {
+
+                        // For 
+                        for (int Count = int.Parse(AsgExp.Value.ToString()); Count >= int.Parse(LmExp.Value.ToString()); Count--)
+                        {
+
+                            // Setear Valores 
+                            ActualValue.Type = "integer";
+                            ActualValue.Value = Count;
+
+                            // Agregar A Tabla De Simbolos 
+                            ActualVar.Value = ActualValue;
+
+                            // Setear Nueva Variable 
+                            ForEnv.SetVariable(this.Identifier, ActualVar);
+
+                            // Verificar Si La Lista De Instrucciones ESta Nulla
+                            if (this.InstruccionsList != null)
+                            {
+
+                                // Recorrer Lista 
+                                foreach (AbstractInstruccion Instruccion in this.InstruccionsList)
+                                {
+
+                                    // Verificar Si NO Es Null
+                                    if (Instruccion != null)
+                                    {
+
+                                        // Obtener Objeto
+                                        ObjectReturn ObjectTransfer = (ObjectReturn)Instruccion.Execute(ForEnv);
+
+                                        // Verificar SI ESta Nullo
+                                        if (ObjectTransfer != null)
+                                        {
+
+                                            // Verificar Si ES Break
+                                            if (ObjectTransfer.Option.Equals("break"))
+                                            {
+
+                                                // Retrun Null
+                                                return null;
+
+                                            }
+                                            else if (ObjectTransfer.Option.Equals("continue"))
+                                            {
+
+                                                // Continuar 
+                                                break;
+
+                                            }
+                                            else
+                                            {
+
+                                                // Verificar Si Hay Ciclos 
+                                                bool Flag = ForEnv.SearchFuncs();
+
+                                                // Verificar 
+                                                if (Flag)
+                                                {
+
+                                                    // Retornar Valor 
+                                                    return ObjectTransfer;
+
+                                                }
+                                                else
+                                                {
+
+                                                    // Agregar Error 
+                                                    VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Exit Tiene Que Aparecer Dentro De Una Funcion", this.TokenLine, this.TokenColumn));
+
+                                                    // Aumentar Contador
+                                                    VariablesMethods.AuxiliaryCounter += 1;
+
+
+                                                }
+
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
                         }
 
                     }
@@ -177,9 +328,9 @@ namespace Proyecto1.TranslatorAndInterpreter
                     if(Instruccion != null) 
                     {
 
-                        // Ejecutar Instruccion 
+                        // Traudcir Instruccion
                         Instruccion.Translate(ForEnv);
-
+                
                     }
 
                 }

@@ -66,8 +66,56 @@ namespace Proyecto1.TranslatorAndInterpreter
                             if (Instruccion != null) 
                             {
 
-                                // Ejecutar Instruccion 
-                                Instruccion.Execute(RepeatEnv);
+                                // Ejecutar Instruccion
+                                ObjectReturn ObjectTransfer = (ObjectReturn)Instruccion.Execute(RepeatEnv);
+
+                                // Verificar SI ESta Nullo
+                                if (ObjectTransfer != null)
+                                {
+
+                                    // Verificar Si ES Break
+                                    if (ObjectTransfer.Option.Equals("break"))
+                                    {
+
+                                        // Retrun Null
+                                        return null;
+
+                                    }
+                                    else if(ObjectTransfer.Option.Equals("continue"))
+                                    {
+
+                                        // Continuar 
+                                        break;
+
+                                    }
+                                    else 
+                                    {
+
+                                        // Verificar Si Hay Ciclos 
+                                        bool Flag = RepeatEnv.SearchFuncs();
+
+                                        // Verificar 
+                                        if (Flag)
+                                        {
+
+                                            // Retornar Valor 
+                                            return ObjectTransfer;
+
+                                        }
+                                        else
+                                        {
+
+                                            // Agregar Error 
+                                            VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Exit Tiene Que Aparecer Dentro De Una Funcion", this.TokenLine, this.TokenColumn));
+
+                                            // Aumentar Contador
+                                            VariablesMethods.AuxiliaryCounter += 1;
+
+                                        }
+
+                                    }
+
+                                }
 
                             }
 
@@ -78,7 +126,7 @@ namespace Proyecto1.TranslatorAndInterpreter
                     // Ejecutar Expression
                     RepeatExp = this.Expression_.Execute(RepeatEnv);
 
-                } while (bool.Parse(RepeatExp.Value.ToString()));
+                } while (!bool.Parse(RepeatExp.Value.ToString()));
 
             }
             else

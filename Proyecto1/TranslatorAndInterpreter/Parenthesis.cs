@@ -41,10 +41,16 @@ namespace Proyecto1.TranslatorAndInterpreter
             }
 
             // Auxiliar
-            ObjectReturn AuxiliaryReturn;
+            ObjectReturn AuxiliaryReturn = null;
 
-            // Obtener
-            AuxiliaryReturn = new ObjectReturn(Value_.Value, Value_.Type);             
+            // Verificar 
+            if (Value_ != null) 
+            {
+
+                // Obtener
+                AuxiliaryReturn = new ObjectReturn(Value_.Value, Value_.Type);
+
+            } 
 
             // Retorno
             return AuxiliaryReturn;

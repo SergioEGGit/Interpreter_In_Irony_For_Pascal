@@ -20,14 +20,22 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Tipo Traduccion
         private readonly String TranslateType;
 
+        // Token Line 
+        private readonly int TokenLine;
+
+        // Token Column
+        private readonly int TokenColumn;
+
         // Constructor 
-        public InsWrite(String WriteType, LinkedList<AbstractExpression> ExpressionList, String TranslateType) 
+        public InsWrite(String WriteType, LinkedList<AbstractExpression> ExpressionList, String TranslateType, int TokenLine, int TokenColumn) 
         {
 
             // Incializar Valores
             this.WriteType = WriteType;
             this.ExpressionList = ExpressionList;
             this.TranslateType = TranslateType;
+            this.TokenLine = TokenLine;
+            this.TokenColumn = TokenColumn;
         
         }
 
@@ -53,8 +61,24 @@ namespace Proyecto1.TranslatorAndInterpreter
                     if(Expression != null) 
                     {
 
-                        // Obtener Valor Y Agregarlo A Consola
-                        VariablesMethods.ExecuteString += AuxiliaryObject.Value.ToString();
+                        // Verificar SI ES Diferetne De Nullo
+                        if (AuxiliaryObject != null) 
+                        {
+
+                            // Obtener Valor Y Agregarlo A Consola
+                            VariablesMethods.ExecuteString += AuxiliaryObject.Value.ToString();
+
+                        }
+                        else
+                        {
+
+                            // Agregar Error 
+                            VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Variable Indicada No Existe En El Contexto Actual", this.TokenLine, this.TokenColumn));
+
+                            // Aumentar Contador
+                            VariablesMethods.AuxiliaryCounter += 1;
+
+                        }
 
                     }
                 

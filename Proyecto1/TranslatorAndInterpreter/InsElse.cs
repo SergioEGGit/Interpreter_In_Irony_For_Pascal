@@ -20,14 +20,22 @@ namespace Proyecto1.TranslatorAndInterpreter
         // Instruccion If 
         public readonly AbstractInstruccion InsIf;
 
+        // TOken LIne 
+        public readonly int TokenLine;
+
+        // Token COlumn
+        public readonly int TokenColumn;
+
         // Constructor 
-        public InsElse(String ElseType, LinkedList<AbstractInstruccion> InstruccionsList, AbstractInstruccion InsIf) 
+        public InsElse(String ElseType, LinkedList<AbstractInstruccion> InstruccionsList, AbstractInstruccion InsIf, int TokenLine, int TokenColumn) 
         {
         
             // Inicializar Valores 
             this.ElseType = ElseType;
             this.InstruccionsList = InstruccionsList;
             this.InsIf = InsIf;
+            this.TokenLine = TokenLine;
+            this.TokenColumn = TokenColumn;
         
         } 
 
@@ -70,7 +78,69 @@ namespace Proyecto1.TranslatorAndInterpreter
                         {
 
                             // Ejecutar 
-                            Instruccion.Execute(ElseEnv);
+                            ObjectReturn ObjectTransfer = (ObjectReturn) Instruccion.Execute(ElseEnv);
+
+                            // Verificar Si Esta Nullo
+                            if (ObjectTransfer != null) 
+                            {
+
+                                // Verificar TIpo 
+                                if (ObjectTransfer.Option.Equals("return"))
+                                {
+
+                                    // Verificar Si Hay Ciclos 
+                                    bool Flag = ElseEnv.SearchFuncs();
+
+                                    // Verificar 
+                                    if (Flag)
+                                    {
+
+                                        // Retornar Valor 
+                                        return ObjectTransfer;
+
+                                    }
+                                    else
+                                    {
+
+                                        // Agregar Error 
+                                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Return Tiene Que Aparecer Dentro De Una Funcion", this.TokenLine, this.TokenColumn));
+
+                                        // Aumentar Contador
+                                        VariablesMethods.AuxiliaryCounter += 1;
+
+
+                                    }
+
+                                }
+                                else
+                                {
+
+                                    // Verificar Si Hay Ciclos 
+                                    bool Flag = ElseEnv.SearchCycles();
+
+                                    // Verificar 
+                                    if (Flag)
+                                    {
+
+                                        // Retornar Valor 
+                                        return ObjectTransfer;
+
+                                    }
+                                    else
+                                    {
+
+                                        // Agregar Error 
+                                        VariablesMethods.ErrorList.AddLast(new ErrorTable(VariablesMethods.AuxiliaryCounter, "Semántico", "La Sentencia Break O Continue Tiene Que Aparecer Dentro De Un Ciclo", this.TokenLine, this.TokenColumn));
+
+                                        // Aumentar Contador
+                                        VariablesMethods.AuxiliaryCounter += 1;
+
+
+                                    }
+
+                                }
+
+                            }
 
                         }
                     

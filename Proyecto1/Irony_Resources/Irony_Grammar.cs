@@ -42,14 +42,17 @@ namespace Proyecto1.Irony_Resources
                 // Writes
                 RegexBasedTerminal ReservedWriteLine = new RegexBasedTerminal("ReservedWriteLine", "writeln|write");
 
+                // For
+                RegexBasedTerminal TypeFor = new RegexBasedTerminal("ReservedWriteLine", "to|downto");
+
             #endregion
 
             // Región Terminales
             #region Terminals
 
-                // Tipos De Datos 
+            // Tipos De Datos 
 
-                BnfTerm StringType = ToTerm("string");
+            BnfTerm StringType = ToTerm("string");
 
                 BnfTerm IntegerType = ToTerm("integer");
 
@@ -255,10 +258,10 @@ namespace Proyecto1.Irony_Resources
                 NonTerminal RepeatBlock = new NonTerminal("RepeatBlock");
 
                 // Sentencias De Transferencias
-                NonTerminal TransferSentences = new NonTerminal("TransferSenteces");
+                NonTerminal TransferSentences = new NonTerminal("TransferSentences");
 
                 // Funciones 
-                NonTerminal Functions = new NonTerminal("Funtions");
+                NonTerminal Functions = new NonTerminal("Functions");
 
                 // Bloque Funcioens 
                 NonTerminal FunctionsBlock = new NonTerminal("FunctionsBlock");
@@ -407,7 +410,7 @@ namespace Proyecto1.Irony_Resources
                 Declaration.Rule                    = VariablesDeclaration
                                                     | ConstantsDeclaration
                                                     | InsGraficarTS
-                                                    //| Functions
+                                                    | Functions
                                                     //| ArraysObjects
                                                     ;
 
@@ -504,11 +507,12 @@ namespace Proyecto1.Irony_Resources
                 Instruccion.Rule                    = InsWrite
                                                     | VariablesAsignation
                                                     | InsIf
-                                                    //| InsCase
+                                                    | InsCase
                                                     | InsWhile
                                                     | InsFor
                                                     | InsRepeat
                                                     | InsGraficarTS
+                                                    | TransferSentences
                                                     ;
 
                 // Producción De Error 
@@ -586,7 +590,7 @@ namespace Proyecto1.Irony_Resources
                                                     ;
 
                 // For 
-                InsFor.Rule                         = ReservedFor + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + ReservedTo + Expression + ReservedDo + ForBlock
+                InsFor.Rule                         = ReservedFor + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + TypeFor + Expression + ReservedDo + ForBlock
                                                     ;
 
                 // Bloque For 
@@ -603,9 +607,87 @@ namespace Proyecto1.Irony_Resources
                 VariablesAsignation.Rule            = SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
                                                     //| SimpleIdentifier + SymbolPoint + SimpleIdentifier + SymbolColon + OperatorEqual + Expression + SymbolSemiColon
                                                     //| SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket + SymbolSemiColon
-                                                    //| SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
-                                                    //| SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
+                                                    | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon
+                                                    | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis + SymbolSemiColon
                                                     ;
+
+                // Sentecia De Transeferencias
+                TransferSentences.Rule              = ReservedBreak + SymbolSemiColon
+                                                    | ReservedContinue + SymbolSemiColon
+                                                    | ReservedExit + SymbolLeftParenthesis + Expression + SymbolRightParenthesis + SymbolSemiColon
+                                                    ;
+
+                // Case 
+                InsCase.Rule                        = ReservedCase + Expression + ReservedOf + Cases
+                                                    ;
+
+                // Casos 
+                Cases.Rule                          = Expression + SymbolColon + CaseBlock + CaseElse
+                                                    ;
+
+                // Bloque Case 
+                CaseBlock.Rule                      = ReservedBegin + Instruccions + ReservedEnd + SymbolSemiColon
+                                                    | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                    ;
+
+                // Produccion De Error
+                CaseBlock.ErrorRule                 = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Case Else 
+                CaseElse.Rule                       = ReservedElse + CaseBlock + ReservedEnd + SymbolSemiColon
+                                                    | ReservedEnd + SymbolSemiColon
+                                                    | Cases
+                                                    ;
+                // Produccion De Error
+                CaseElse.ErrorRule                  = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Funciones Y Procedimientos
+                Functions.Rule                      = ReservedFunction + SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
+                                                    | ReservedProcedure + SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
+                                                    | ReservedFunction + SimpleIdentifier + SymbolLeftParenthesis + ParamListDeclaration + SymbolRightParenthesis + SymbolColon + Types + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
+                                                    | ReservedProcedure + SimpleIdentifier + SymbolLeftParenthesis + ParamListDeclaration + SymbolRightParenthesis + SymbolSemiColon + FunctionsDeclarations + FunctionsBlock
+                                                    ;
+
+                // Funciones Declarations
+                FunctionsDeclarations.Rule          = Declarations
+                                                    | Empty
+                                                    ;
+
+                // Bloque Funciones 
+                FunctionsBlock.Rule                 = ReservedBegin + Instruccions + ReservedEnd + SymbolSemiColon
+                                                    | ReservedBegin + ReservedEnd + SymbolSemiColon
+                                                    ;
+
+                // Produccion De Error
+                FunctionsBlock.ErrorRule            = SyntaxError + SymbolSemiColon
+                                                    | SyntaxError + ReservedEnd
+                                                    ;
+
+                // Lista De Parametros
+                ParamListDeclaration.Rule           = ParamListDeclaration + ParamDecList
+                                                    | ParamDecList
+                                                    ;
+
+                // Lista De Declaraciones Sintaxis
+                ParamDecList.Rule                   = ParamsDec + SymbolColon + Types + ParamEnd
+                                                    ;
+
+
+                // Lista De Delcaraciones 
+                ParamsDec.Rule                      = ParamsDec + SymbolComma + SimpleIdentifier
+                                                    | ReservedVar + SimpleIdentifier
+                                                    | SimpleIdentifier
+                                                    ;
+
+                // Fin Parametro             
+                ParamEnd.Rule                       = SymbolSemiColon
+                                                    | Empty
+                                                    ;
+
                 // Expresiones 
                 Expression.Rule                     = SymbolLeftParenthesis + Expression + SymbolRightParenthesis
                                                     | Expression + OperatorPlus + Expression
@@ -637,11 +719,9 @@ namespace Proyecto1.Irony_Resources
                                                     | SimpleReal
                                                     | SimpleBoolean
                                                     | SimpleIdentifier
-                                                    /*| SimpleIdentifier + SymbolPoint + SimpleIdentifier
                                                     | SimpleIdentifier + SymbolLeftParenthesis + SymbolRightParenthesis
                                                     | SimpleIdentifier + SymbolLeftParenthesis + ParamsValueList + SymbolRightParenthesis
-                                                    | SimpleIdentifier + SymbolLeftBracket + Expression + SymbolRightBracket
-                                                    */;
+                                                    ;
 
             #endregion
 

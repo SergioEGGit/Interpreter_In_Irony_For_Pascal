@@ -23,9 +23,9 @@ namespace Proyecto1
         }
 
         // Acción Click Botón Analizar 
-        private void ButtonAnalyze_Click(object sender, EventArgs e)
+        private void ButtonTranslate_Click(object sender, EventArgs e)
         {
-           
+
             // Obtener Texto De Consola De Entrada 
             String EntranceString = TextEntrance.Text;
 
@@ -38,6 +38,18 @@ namespace Proyecto1
             // Agregar Traduccion
             TextEntrance.Text = VariablesMethods.TranslateString;
 
+        }
+
+        // Acción Click Botón Ejecutar
+        private void ButtonExecute_Click(object sender, EventArgs e)
+        {
+
+            // Obtener Texto De Consola De Entrada 
+            String EntranceString = TextEntrance.Text;
+
+            // Analizar Texto 
+            ParserTranslate.AnalyzeExecute(EntranceString);
+
             // Limpiar Consola 
             TextConsole.Text = "";
 
@@ -46,24 +58,15 @@ namespace Proyecto1
 
         }
 
-        // Acción Click Botón Ejecutar
-        private void ButtonExecute_Click(object sender, EventArgs e)
-        {
-
-        }
-
         // Acción Click Botón Reportes 
         private void ButtonReports_Click(object sender, EventArgs e)
         {
 
-            foreach(var Error in VariablesMethods.ErrorList) {
-
-                MessageBox.Show(Error.ErrorDescripcion);
-            
-            }
+            // Llamar A Metodo Report
+            ParserTranslate.GenerateReports();
 
         }
-
+    
     }
 
 }
