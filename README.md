@@ -2,7 +2,7 @@
 
 ## Language: C#
 
-## Tools: Irony
+## Tools: Irony, Graphviz
 
 Interpreter in irony for pascal SEG: This system is an interpreter that accepts pascal as the input language and translates it to a 
 simpler pascal without nested functions, in addition, executing all the instructions and displaying an output in the console also allows to generate 
